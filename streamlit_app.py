@@ -42,16 +42,19 @@ sale_url = f"https://www.voyage-prive.com/fiche-produit/details/{selected_sale_i
 st.markdown(f"You selected: [{selected_sale}]({sale_url})")
 
 # Show a multiselect widget with the genres using `st.multiselect`.
+available_sale_dimensions = ["Location", "Pricing", "Stay Type", "Equipment & Services", "Accessibility"]
 sale_dimensions = st.multiselect(
     "Dimensions",
-    ["Location", "Pricing", "Stay Type", "Equipment & Services", "Accessibility"],
-    ["Location", "Pricing", "Stay Type", "Equipment & Services", "Accessibility"],
+    available_sale_dimensions,
+    ["Location", "Pricing"],
 )
 
 # Show a slider widget with the years using `st.slider`.
 top = st.slider("Top", 1, 10, (1, 5))
 
+selected_rankings_df = rankings_df[rankings_df['sale_uid_a'] == selected_sale_uid]
 
+st.write("Pricing" in sale_dimensions)
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
