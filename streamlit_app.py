@@ -7,10 +7,9 @@ st.set_page_config(page_title="Similar Products", page_icon="🏝️")
 st.title("🏝️ Similar Products")
 st.write(
     """
-    This app visualizes data from [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata).
-    It shows which movie genre performed best at the box office over the years. Just 
-    click on the widgets below to explore!
-    This is a new line
+    This app visualizes results from similar products algorithm .
+    It shows for each selected live sale the top similar sales based on different dimensions!
+    Just click on the widgets below to explore!
     """
 )
 
