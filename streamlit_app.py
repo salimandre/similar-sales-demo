@@ -20,16 +20,16 @@ st.write(
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/movies_genres_summary.csv")
-    sales_display_name_df = pd.read_csv("data/sales_display_name.csv")
-    return df, sales_display_name_df
+    sales_display_names_df = pd.read_csv("data/sales_display_names.csv")
+    return df, sales_display_names_df
 
 
-df, sales_display_name_df = load_data()
+df, sales_display_names_df = load_data()
 
 # Show a multiselect widget with the sales using `st.multiselect`.
 sale_names = st.multiselect(
     "Sales",
-    sales_display_name_df.sale_display_name.unique(),
+    sales_display_names_df.sale_display_name.unique(),
     #["Action", "Adventure", "Biography", "Comedy", "Drama", "Horror"],
 )
 
