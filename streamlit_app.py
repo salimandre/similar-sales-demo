@@ -30,9 +30,6 @@ def load_data():
 
 rankings_df, sales_display_names_df = load_data()
 
-sale_id_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
-sale_name_to_id_dict = sales_display_names_df.drop_duplicates().set_index('sale_display_name')['sale_uid'].to_dict()
-
 # Adding selection box by sale display name 
 selected_sale = st.selectbox(
     "Select a sale:",
@@ -41,7 +38,9 @@ selected_sale = st.selectbox(
 )
 
 # Get the Sale ID for the selected sale
-selected_sale_uid = sales_display_names_df[sales_display_names_df['sale_display_name'] == selected_sale]['sale_uid'].iloc[0]
+#sale_uid_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
+sale_name_to_uid_dict = sales_display_names_df.drop_duplicates().set_index('sale_display_name')['sale_uid'].to_dict()
+selected_sale_uid = sale_name_to_uid_dict.get(selected_sale)
 selected_culture = selected_sale_uid[:5]
 selected_sale_id = extract_sale_id(selected_sale_uid)
 
