@@ -20,6 +20,7 @@ st.write(
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/movies_genres_summary.csv")
+    sales_display_name_df = pd.read_csv("data/sales_display_name.csv")
     return df
 
 
