@@ -70,8 +70,7 @@ max_rank = top[1]
 
 selected_rankings_df = rankings_df[rankings_df['sale_uid_a'] == selected_sale_uid]
 
-#st.write(selected_rankings_df) TO REMOVE
-all_top_sales_df = {}
+all_top_sales_dict = {}
 for dim in available_sale_dimensions:
     if dim in selected_sale_dimensions:
         dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
@@ -82,32 +81,36 @@ for dim in available_sale_dimensions:
         
         dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
         
-        all_top_sales_df[dim] = dim_top_sales_df
-
-        #st.dataframe(dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col, "sale_url"]])
         st.markdown(dim_top_sales_df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
         dim_top_sales_df['dimension'] = dim
-        all_top_sales_df[dim] = dim_top_sales_df
+        all_top_sales_dict[dim] = dim_top_sales_df
 
 # combine rankings for similarity graph
 combined_dim_top_sales_df = pd.concat(
-    [all_top_sales_df['Location'], all_top_sales_df['Pricing']],
+    all_top_sales_dict.values(),
     ignore_index=True
 )
-'''
-fig = px.scatter(
-    combined_dim_top_sales_df,
-    x="rank",
-    y="similarity",
-    color="dimension",
-    labels={"rank": "Rank", "similarity": "Similarity", "dimension": "Dimension"},
-    title="Rank vs. Similarity by Dimension",
-    range_y=[0, 1]
+
+#st.write(combined_dim_top_sales_df)
+
+chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
+    x=alt.X('rank:Q', title='Rank'),
+    y=alt.Y('similarity:Q', title='Similarity', scale=alt.Scale(domain=[0, 1])),
+    color=alt.Color(
+        'dimension:N',
+        title='Dimension',
+        scale=alt.Scale(scheme='category10')
+    ),
+    tooltip=['rank', 'similarity', 'dimension']  # Add tooltips for interactivity
+).properties(
+    width=800,
+    height=400,
+    title="Rank vs. Similarity by Dimension"
 )
 
-st.plotly_chart(fig)
-'''
+st.altair_chart(chart, use_container_width=True)
+
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
