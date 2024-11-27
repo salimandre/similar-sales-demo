@@ -17,20 +17,14 @@ st.write(
 # reruns (e.g. if the user interacts with the widgets).
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/movies_genres_summary.csv")
+    rankings_df = pd.read_csv("data/similar_products_rankings.csv")
     sales_display_names_df = pd.read_csv("data/similar_products_display_names.csv")
-    return df, sales_display_names_df
+    return rankings_df, sales_display_names_df
 
 
-df, sales_display_names_df = load_data()
+rankings_df, sales_display_names_df = load_data()
 
-# Show a multiselect widget with the sales using `st.multiselect`.
-#sale_names = st.multiselect(
-#    "Sales",
-#    sales_display_names_df.sale_display_name.unique(),
-#    #["Action", "Adventure", "Biography", "Comedy", "Drama", "Horror"],
-#)
-
+# Adding selection box by sale display name 
 selected_sale = st.selectbox(
     "Select a sale:",
     sales_display_names_df['sale_display_name'],
