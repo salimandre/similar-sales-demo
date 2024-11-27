@@ -21,10 +21,17 @@ st.write(
 def load_data():
     df = pd.read_csv("data/movies_genres_summary.csv")
     sales_display_name_df = pd.read_csv("data/sales_display_name.csv")
-    return df
+    return df, sales_display_name_df
 
 
-df = load_data()
+df, sales_display_name_df = load_data()
+
+# Show a multiselect widget with the sales using `st.multiselect`.
+sale_names = st.multiselect(
+    "Sales",
+    sales_display_name_df.sale_display_name.unique(),
+    #["Action", "Adventure", "Biography", "Comedy", "Drama", "Horror"],
+)
 
 # Show a multiselect widget with the genres using `st.multiselect`.
 genres = st.multiselect(
