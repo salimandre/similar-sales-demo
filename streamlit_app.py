@@ -2,6 +2,11 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+# Utils
+sale_url_template = "https://www.voyage-prive.com/fiche-produit/details/{insert_sale_id}/b1"
+extract_sale_id = lambda sale_id_str: int(''.join(filter(str.isdigit, sale_id_str)))
+display_url_html = lambda url: f'<a href="{url}" target="_blank">View Sale</a>'
+
 # Show the page title and description.
 st.set_page_config(page_title="Similar Products", page_icon="🏝️")
 st.title("🏝️ Similar Products")
@@ -34,12 +39,10 @@ selected_sale = st.selectbox(
 # Get the Sale ID for the selected sale
 selected_sale_uid = sales_display_names_df[sales_display_names_df['sale_display_name'] == selected_sale]['sale_uid'].iloc[0]
 selected_culture = selected_sale_uid[:5]
-extract_sale_id = lambda sale_id_str: int(''.join(filter(str.isdigit, sale_id_str)))
 selected_sale_id = extract_sale_id(selected_sale_uid)
 
 # Display the Sale URL to the user
 #st.write(f"You selected: {selected_sale}")
-sale_url_template = "https://www.voyage-prive.com/fiche-produit/details/{insert_sale_id}/b1"
 selected_sale_url = sale_url_template.format(insert_sale_id=selected_sale_id)
 st.markdown(f"You selected: [{selected_sale}]({selected_sale_url}) (culture: {selected_culture}, id: {selected_sale_id})")
 
@@ -72,9 +75,14 @@ for dim in available_sale_dimensions:
     if dim in selected_sale_dimensions:
         dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
         dim_rank_col = available_sale_dimensions.get(dim) + '__similarity_rank'
+        
         dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
-        dim_top_sales_df['sale_url'] = [sale_url_template.format(insert_sale_id=extract_sale_id(s_uid)) for s_uid in dim_top_sales_df["sale_uid_b"]]
-        st.dataframe(dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col, "sale_url"]])
+        dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]]
+        
+        dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
+        
+        #st.dataframe(dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col, "sale_url"]])
+        st.markdown(dim_top_sales_df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
