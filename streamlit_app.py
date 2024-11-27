@@ -7,12 +7,11 @@ st.set_page_config(page_title="Similar Products", page_icon="🏝️")
 st.title("🏝️ Similar Products")
 st.write(
     """
-    This app visualizes results from similar products algorithm .
+    This app visualizes results from similar products algorithm.
     It shows for each selected live sale the top similar sales based on different dimensions!
     Just click on the widgets below to explore!
     """
 )
-
 
 # Load the data from a CSV. We're caching this so it doesn't reload every time the app
 # reruns (e.g. if the user interacts with the widgets).
@@ -59,3 +58,14 @@ sale_dimensions = st.multiselect(
 top = st.slider("Top", 1, 10, (1, 5))
 
 
+
+# Footer
+st.markdown("---")  # Horizontal line for separation
+st.markdown(
+    """
+    <div style='text-align: center;'>
+        Made with 💖 by <strong>Gautier</strong>, <strong>Corentin</strong> and <strong>Jean-Luc</strong>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
