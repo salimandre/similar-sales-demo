@@ -66,7 +66,7 @@ max_rank = top[1]
 
 selected_rankings_df = rankings_df[rankings_df['sale_uid_a'] == selected_sale_uid]
 
-st.write(selected_rankings_df)
+#st.write(selected_rankings_df) TO REMOVE
 
 for dim in available_sale_dimensions:
     if dim in selected_sale_dimensions:
