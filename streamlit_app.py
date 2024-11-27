@@ -30,6 +30,9 @@ def load_data():
 
 rankings_df, sales_display_names_df = load_data()
 
+sale_id_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
+sale_name_to_id_dict = sales_display_names_df.drop_duplicates().set_index('sale_display_name')['sale_uid'].to_dict()
+
 # Adding selection box by sale display name 
 selected_sale = st.selectbox(
     "Select a sale:",
@@ -57,6 +60,14 @@ available_sale_dimensions =  \
         "Accessibility": "accessibility"
     }
 
+available_sale_dimensions_emojis = {
+    "Location": "📍",
+    "Pricing": "💰",
+    "Stay Type": "🕶️",
+    "Equipment & Services": "⛳",
+    "Accessibility": "♿"
+}
+
 selected_sale_dimensions = st.multiselect(
     "Dimensions",
     list(available_sale_dimensions.keys()),
@@ -81,7 +92,8 @@ for dim in available_sale_dimensions:
         
         dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
         
-        st.markdown(dim_top_sales_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+        st.markdown(f"### {available_sale_dimensions_emojis.get(dim)} Top Results for {dim}")
+        st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
 
         dim_top_sales_df['dimension'] = dim
         all_top_sales_dict[dim] = dim_top_sales_df
