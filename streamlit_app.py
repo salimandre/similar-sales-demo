@@ -34,9 +34,18 @@ df, sales_display_names_df = load_data()
 #)
 
 selected_sale = st.selectbox(
-    'Select a Sales Name:',
-    sales_display_names_df['sale_display_name']
+    "Select a sale:",
+    sales_display_names_df['sale_display_name'],
+    index=3
 )
+
+# Get the Sale ID for the selected sale
+selected_sale_uid = sales_display_names_df[sales_display_names_df['sale_display_name'] == selected_sale]['sale_uid'].iloc[0]
+
+# Display the Sale URL to the user
+#st.write(f"You selected: {selected_sale}")
+sale_url = f"https://www.voyage-prive.com/fiche-produit/details/{selected_sale_uid}/b1"
+st.markdown(f"You selected: [{selected_sale}]({sale_url})")
 
 # Show a multiselect widget with the genres using `st.multiselect`.
 genres = st.multiselect(
