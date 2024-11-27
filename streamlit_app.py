@@ -58,7 +58,7 @@ st.markdown("---")  # Horizontal line for separation
 st.markdown(
     """
     <div style='text-align: center;'>
-        Made with 💖 by <strong>Gautier</strong>, <strong>Corentin</strong> and <strong>Jean-Luc</strong>
+        Made with 💖 by <strong>Gautier</strong>, <strong>Jean-Luc</strong> and <strong>Corentin</strong>
     </div>
     """,
     unsafe_allow_html=True
