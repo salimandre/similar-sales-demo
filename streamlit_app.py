@@ -43,7 +43,7 @@ sale_url_template = "https://www.voyage-prive.com/fiche-produit/details/{insert_
 selected_sale_url = sale_url_template.format(insert_sale_id=selected_sale_id)
 st.markdown(f"You selected: [{selected_sale}]({selected_sale_url}) (culture: {selected_culture}, id: {selected_sale_id})")
 
-# Show a multiselect widget with the genres using `st.multiselect`.
+# Show a multiselect widget with the sale dimensions using `st.multiselect`.
 available_sale_dimensions =  \
     {
         "Location": "location",
@@ -73,8 +73,8 @@ for dim in available_sale_dimensions:
         dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
         dim_rank_col = available_sale_dimensions.get(dim) + '__similarity_rank'
         dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
-        dim_top_sales_df['sale_url'] = [sale_url_template.format(insert_sale_id=s_id) for s_id]
-        st.dataframe(dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]])
+        dim_top_sales_df['sale_url'] = [sale_url_template.format(insert_sale_id=extract_sale_id(s_uid)) for s_uid in dim_top_sales_df["sale_uid_b"]]
+        st.dataframe(dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col, "sale_url"]])
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
