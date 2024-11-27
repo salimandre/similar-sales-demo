@@ -1,6 +1,7 @@
 import altair as alt
 import pandas as pd
 import streamlit as st
+#import plotly.express as px
 
 # Utils
 sale_url_template = "https://www.voyage-prive.com/fiche-produit/details/{insert_sale_id}/b1"
@@ -70,19 +71,43 @@ max_rank = top[1]
 selected_rankings_df = rankings_df[rankings_df['sale_uid_a'] == selected_sale_uid]
 
 #st.write(selected_rankings_df) TO REMOVE
-
+all_top_sales_df = {}
 for dim in available_sale_dimensions:
     if dim in selected_sale_dimensions:
         dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
         dim_rank_col = available_sale_dimensions.get(dim) + '__similarity_rank'
         
         dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
-        dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]]
+        dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]].rename(columns={dim_rank_col: "rank", dim_sim_col: "similarity"})
         
         dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
         
+        all_top_sales_df[dim] = dim_top_sales_df
+
         #st.dataframe(dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col, "sale_url"]])
         st.markdown(dim_top_sales_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+        dim_top_sales_df['dimension'] = dim
+        all_top_sales_df[dim] = dim_top_sales_df
+
+# combine rankings for similarity graph
+combined_dim_top_sales_df = pd.concat(
+    [all_top_sales_df['Location'], all_top_sales_df['Pricing']],
+    ignore_index=True
+)
+'''
+fig = px.scatter(
+    combined_dim_top_sales_df,
+    x="rank",
+    y="similarity",
+    color="dimension",
+    labels={"rank": "Rank", "similarity": "Similarity", "dimension": "Dimension"},
+    title="Rank vs. Similarity by Dimension",
+    range_y=[0, 1]
+)
+
+st.plotly_chart(fig)
+'''
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
