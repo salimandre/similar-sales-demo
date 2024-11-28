@@ -29,8 +29,8 @@ def load_data():
     sales_display_names_df = pd.read_csv("data/similar_products_display_names.csv")
     sales_features_df = pd.read_csv("data/similar_products_features.csv")
     with open("data/similar_products_feature_cols.json", 'r') as f:
-        sale_feature_cols = json.load(f)
-    return rankings_df, sales_display_names_df, sales_features_df, sale_feature_cols
+        sales_features_cols = json.load(f)
+    return rankings_df, sales_display_names_df, sales_features_df, sales_features_cols
 
 
 rankings_df, sales_display_names_df = load_data()
