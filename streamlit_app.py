@@ -189,10 +189,10 @@ for dim in available_sale_dimensions:
 
                     st.altair_chart(chart)
 
-                    st.altair_chart(chart)
 st.text("\n\n")
 
 # combine rankings for similarity plot
+st.text("\n\n")
 combined_dim_top_sales_df = pd.concat(
     all_top_sales_dict.values(),
     ignore_index=True
