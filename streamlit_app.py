@@ -2,6 +2,8 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 import json
+import matplotlib.pyplot as plt
+import numpy as np
 #import plotly.express as px
 
 # Utils
@@ -171,19 +173,28 @@ if st.session_state.get('show_hello', False):
     filtered_dict1 = {k: v for k, v in feats_1.items()}
     filtered_dict2 = {k: v for k, v in feats_2.items()}
 
-    df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
+    #df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
+    
+    # Prepare DataFrame for Altair
+    df = pd.DataFrame({
+        'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
+        'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
+        'Source': ['Dict1'] * len(filtered_dict1) + ['Dict2'] * len(filtered_dict2)
+    })
 
-    # Displaying common features
-    st.subheader('Common Features (1 in both)')
-    st.write(common_features)
+    # Create horizontal bar chart with Altair
+    chart = alt.Chart(df).mark_bar().encode(
+        x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
+        y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
+        color='Source:N',
+        tooltip=['Feature:N', 'Value:Q', 'Source:N']
+    ).properties(
+        title="Comparison of Features",
+        width=600,
+        height=400
+    )
 
-    # Displaying different features
-    st.subheader('Different Features (1 in one and 0 in the other)')
-    st.write(different_features)
-
-    # Creating a DataFrame for a visual comparison
-    #df = pd.DataFrame([dict1, dict2], index=['Dict1', 'Dict2']).T
-    st.bar_chart(df)
+    st.altair_chart(chart)
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
