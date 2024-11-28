@@ -124,7 +124,7 @@ for dim in available_sale_dimensions:
 
         # Display dimension
         st.markdown(f"### {available_sale_dimensions_emojis.get(dim)} Top Results for {dim}")
-        st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
+        #st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
 
         dim_top_sales_df['dimension'] = dim
         all_top_sales_dict[dim] = dim_top_sales_df
