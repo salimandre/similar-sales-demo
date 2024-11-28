@@ -135,7 +135,56 @@ for dim in available_sale_dimensions:
                 col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
                 col1.markdown(f"**#{offer['rank']}**")
                 col2.markdown(f"**Similarity:** {offer['similarity']:.3f}")
-                col3.markdown(f"[View Sale]({offer['sale_url']})", unsafe_allow_html=True)
+                col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
+
+                # Add a button in col4 to toggle chart display
+                if col4.button("Explain", key=f"toggle_{offer['rank']}"):
+                    # Toggle the display state in session state
+                    key = f"show_chart_{offer['rank']}"
+                    if key not in st.session_state:
+                        st.session_state[key] = True
+                    else:
+                        st.session_state[key] = not st.session_state[key]
+
+                # Condition to display the text based on the toggle state
+                if st.session_state.get(f"show_chart_{offer['rank']}", False):
+                    dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
+                    dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
+                    common_features, different_features = compare_features(dict1, dict2)
+
+                    # Format feature names
+                    relevant_keys = set(common_features+different_features)
+                    feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
+                    feats_2 = {k.split('__')[1]: dict2[k] for k in relevant_keys}
+
+                    # Remove prefix for the DataFrame display
+                    filtered_dict1 = {k: v for k, v in feats_1.items()}
+                    filtered_dict2 = {k: v for k, v in feats_2.items()}
+
+                    #df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
+                    
+                    # Prepare DataFrame for Altair
+                    df = pd.DataFrame({
+                        'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
+                        'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
+                        'Source': ['Dict1'] * len(filtered_dict1) + ['Dict2'] * len(filtered_dict2)
+                    })
+
+                    # Create horizontal bar chart with Altair
+                    chart = alt.Chart(df).mark_bar().encode(
+                        x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
+                        y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
+                        color='Source:N',
+                        tooltip=['Feature:N', 'Value:Q', 'Source:N']
+                    ).properties(
+                        title="Comparison of Features",
+                        width=600,
+                        height=400
+                    )
+
+                    st.altair_chart(chart)
+
+                    st.altair_chart(chart)
 
 # combine rankings for similarity plot
 combined_dim_top_sales_df = pd.concat(
