@@ -214,51 +214,6 @@ chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
 
 st.altair_chart(chart, use_container_width=True)
 
-# Add explainability
-
-# Button to toggle the display of the sentence
-if st.button('Explain'):
-    # Use session state to track toggle state
-    st.session_state.show_hello = not st.session_state.get('show_hello', False)
-
-# Condition to display the text based on the toggle state
-if st.session_state.get('show_hello', False):
-    dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
-    dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
-    common_features, different_features = compare_features(dict1, dict2)
-
-    # Format feature names
-    relevant_keys = set(common_features+different_features)
-    feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
-    feats_2 = {k.split('__')[1]: dict2[k] for k in relevant_keys}
-
-    # Remove prefix for the DataFrame display
-    filtered_dict1 = {k: v for k, v in feats_1.items()}
-    filtered_dict2 = {k: v for k, v in feats_2.items()}
-
-    #df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
-    
-    # Prepare DataFrame for Altair
-    df = pd.DataFrame({
-        'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
-        'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
-        'Source': ['Dict1'] * len(filtered_dict1) + ['Dict2'] * len(filtered_dict2)
-    })
-
-    # Create horizontal bar chart with Altair
-    chart = alt.Chart(df).mark_bar().encode(
-        x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
-        y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
-        color='Source:N',
-        tooltip=['Feature:N', 'Value:Q', 'Source:N']
-    ).properties(
-        title="Comparison of Features",
-        width=600,
-        height=400
-    )
-
-    st.altair_chart(chart)
-
 # Footer
 st.markdown("---")  # Horizontal line for separation
 st.markdown(
