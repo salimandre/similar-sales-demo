@@ -123,6 +123,7 @@ for dim in available_sale_dimensions:
         dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
 
         # Display dimension
+        st.text("\n\n")
         st.markdown(f"### {available_sale_dimensions_emojis.get(dim)} Top Results for {dim}")
         #st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
 
