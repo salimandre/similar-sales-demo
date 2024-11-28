@@ -112,22 +112,6 @@ selected_rankings_df = rankings_df[rankings_df['sale_uid_a'] == selected_sale_ui
 all_top_sales_dict = {}
 for dim in available_sale_dimensions:
     if dim in selected_sale_dimensions:
-        dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
-        dim_rank_col = available_sale_dimensions.get(dim) + '__similarity_rank'
-        
-        dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
-        dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]].rename(columns={dim_rank_col: "rank", dim_sim_col: "similarity"})
-        
-        dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
-        
-        st.markdown(f"### {available_sale_dimensions_emojis.get(dim)} Top Results for {dim}")
-        st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
-
-        dim_top_sales_df['dimension'] = dim
-        all_top_sales_dict[dim] = dim_top_sales_df
-
-for dim in available_sale_dimensions:
-    if dim in selected_sale_dimensions:
 
         # Prepare top offers
         dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
