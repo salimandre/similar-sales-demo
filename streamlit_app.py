@@ -141,7 +141,7 @@ for dim in available_sale_dimensions:
                 col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
 
                 # Add a button in col4 to toggle chart display
-                if col4.button("Explain", key=f"toggle_{offer['rank']}"):
+                if col4.button("Explain", key=f"toggle_{dim}_{offer['rank']}"):
                     # Toggle the display state in session state
                     key = f"show_chart_{offer['rank']}"
                     if key not in st.session_state:
