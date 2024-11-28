@@ -10,6 +10,37 @@ extract_sale_id = lambda sale_id_str: int(''.join(filter(str.isdigit, sale_id_st
 display_url_html = lambda url: f'<a href="{url}" target="_blank">View Sale</a>'
 get_dict_from_df = lambda df: df.to_dict(orient='records')[0]
 
+available_sale_dimensions =  \
+    {
+        "Location": "location",
+        "Pricing": "pricing", 
+        "Stay Type": "stay_type",
+        "Equipment & Services": "equipment_service",
+        "Accessibility": "accessibility"
+    }
+
+available_sale_dimensions_emojis = {
+    "Location": "📍",
+    "Pricing": "💰",
+    "Stay Type": "🕶️",
+    "Equipment & Services": "⛳",
+    "Accessibility": "♿"
+}
+
+def compare_features(dict1, dict2):
+    common = []
+    diff = []
+    # Iterate through all unique keys that might appear in either dictionary
+    all_keys = set(dict1).union(dict2)
+    for key in all_keys:
+        val1 = dict1.get(key, 0)  # Default to 0 if key is not found
+        val2 = dict2.get(key, 0)  # Default to 0 if key is not found
+        if val1 == val2 == 1:
+            common.append(key)
+        elif val1 != val2 and (val1 == 1 or val2 == 1):
+            diff.append(key)
+    return common, diff
+
 # Show the page title and description.
 st.set_page_config(page_title="Similar Products", page_icon="🏝️")
 st.title("🏝️ Similar Products")
@@ -33,7 +64,15 @@ def load_data():
     return rankings_df, sales_display_names_df, sales_features_df, sales_features_cols_json
 
 
-rankings_df, sales_display_names_df, sales_features_df, sales_features_cols = load_data()
+rankings_df, sales_display_names_df, sales_features_df, sales_features_cols_json = load_data()
+
+# Thematic feature df
+location_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['location']]
+pricing_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['pricing']]
+equipment_service_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['equipment_service']]
+stay_type_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['stay_type']]
+accessibility_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['accessibility']]
+
 
 # Adding selection box by sale display name 
 selected_sale = st.selectbox(
@@ -55,23 +94,6 @@ selected_sale_url = sale_url_template.format(insert_sale_id=selected_sale_id)
 st.markdown(f"You selected: [{selected_sale}]({selected_sale_url}) (culture: {selected_culture}, id: {selected_sale_id})")
 
 # Show a multiselect widget with the sale dimensions using `st.multiselect`.
-available_sale_dimensions =  \
-    {
-        "Location": "location",
-        "Pricing": "pricing", 
-        "Stay Type": "stay_type",
-        "Equipment & Services": "equipment_service",
-        "Accessibility": "accessibility"
-    }
-
-available_sale_dimensions_emojis = {
-    "Location": "📍",
-    "Pricing": "💰",
-    "Stay Type": "🕶️",
-    "Equipment & Services": "⛳",
-    "Accessibility": "♿"
-}
-
 selected_sale_dimensions = st.multiselect(
     "Dimensions",
     list(available_sale_dimensions.keys()),
@@ -127,6 +149,41 @@ chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
 
 st.altair_chart(chart, use_container_width=True)
 
+# Add explainability
+
+# Button to toggle the display of the sentence
+if st.button('Explain'):
+    # Use session state to track toggle state
+    st.session_state.show_hello = not st.session_state.get('show_hello', False)
+
+# Condition to display the text based on the toggle state
+if st.session_state.get('show_hello', False):
+    dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
+    dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
+    common_features, different_features = compare_features(dict1, dict2)
+
+    # Format feature names
+    relevant_keys = set(common_features+different_features)
+    feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
+    feats_2 = {k.split('__')[1]: dict2[k] for k in relevant_keys}
+
+    # Remove prefix for the DataFrame display
+    filtered_dict1 = {k: v for k, v in feats_1.items()}
+    filtered_dict2 = {k: v for k, v in feats_2.items()}
+
+    df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
+
+    # Displaying common features
+    st.subheader('Common Features (1 in both)')
+    st.write(common_features)
+
+    # Displaying different features
+    st.subheader('Different Features (1 in one and 0 in the other)')
+    st.write(different_features)
+
+    # Creating a DataFrame for a visual comparison
+    #df = pd.DataFrame([dict1, dict2], index=['Dict1', 'Dict2']).T
+    st.bar_chart(df)
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
