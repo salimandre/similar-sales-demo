@@ -126,13 +126,22 @@ for dim in available_sale_dimensions:
         dim_top_sales_df['dimension'] = dim
         all_top_sales_dict[dim] = dim_top_sales_df
 
-# combine rankings for similarity graph
+for dim in available_sale_dimensions:
+    if dim in selected_sale_dimensions:
+        for i in range(max_rank - min_rank + 1):
+            offer = get_dict_from_df(all_top_sales_dict[dim].iloc[[i]])
+            with st.container():
+                # Display Offer Details
+                col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
+                col1.markdown(f"**#{offer['rank']}**")
+                col2.markdown(f"**Similarity:** {offer['similarity']:.3f}")
+                col3.markdown(f"[View Sale]({offer['sale_url']})", unsafe_allow_html=True)
+
+# combine rankings for similarity plot
 combined_dim_top_sales_df = pd.concat(
     all_top_sales_dict.values(),
     ignore_index=True
 )
-
-#st.write(combined_dim_top_sales_df)
 
 chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
     x=alt.X('rank:Q', title='Rank'),
