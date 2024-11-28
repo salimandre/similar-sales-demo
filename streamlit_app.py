@@ -2,8 +2,8 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 import json
-import matplotlib.pyplot as plt
-import numpy as np
+#import matplotlib.pyplot as plt
+#import numpy as np
 #import plotly.express as px
 
 # Utils
