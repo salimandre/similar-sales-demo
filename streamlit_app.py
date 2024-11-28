@@ -46,10 +46,10 @@ def compare_features(dict1, dict2):
 # Show the page title and description.
 st.set_page_config(page_title="Similar Products", page_icon="🏝️")
 st.title("🏝️ Similar Products")
-st.write(
+st.text(
     """
-    This app visualizes results from similar products algorithm.\n
-    It shows for each selected live sale the top similar sales based on different dimensions!\n
+    This app visualizes results from similar products algorithm.
+    It shows for each selected live sale the top similar sales based on different dimensions!
     Just click on the widgets below to explore!
     """
 )
