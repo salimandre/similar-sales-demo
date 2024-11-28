@@ -178,7 +178,8 @@ for dim in available_sale_dimensions:
                     chart = alt.Chart(df).mark_bar().encode(
                         x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
                         y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
-                        color='Source:N',
+                        #color='Source:N',
+                        color=alt.Color('Source:N', scale=alt.Scale(scheme='purples')),
                         tooltip=['Feature:N', 'Value:Q', 'Source:N']
                     ).properties(
                         title="Comparison of Features",
