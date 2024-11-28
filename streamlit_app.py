@@ -48,8 +48,8 @@ st.set_page_config(page_title="Similar Products", page_icon="🏝️")
 st.title("🏝️ Similar Products")
 st.write(
     """
-    This app visualizes results from similar products algorithm.
-    It shows for each selected live sale the top similar sales based on different dimensions!
+    This app visualizes results from similar products algorithm.\n
+    It shows for each selected live sale the top similar sales based on different dimensions!\n
     Just click on the widgets below to explore!
     """
 )
