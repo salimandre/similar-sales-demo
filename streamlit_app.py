@@ -144,14 +144,14 @@ for dim in available_sale_dimensions:
                 # Add a button in col4 to toggle chart display
                 if col4.button("Explain", key=f"toggle_{dim}_{i}"):
                     # Toggle the display state in session state
-                    key = f"show_chart_{offer['rank']}"
+                    key = f"show_chart_{dim}_{i}"
                     if key not in st.session_state:
                         st.session_state[key] = True
                     else:
                         st.session_state[key] = not st.session_state[key]
 
                 # Condition to display the text based on the toggle state
-                if st.session_state.get(f"show_chart_{offer['rank']}", False):
+                if st.session_state.get(f"show_chart_{dim}_{i}", False):
                     dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
                     dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
                     common_features, different_features = compare_features(dict1, dict2)
