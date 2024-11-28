@@ -1,12 +1,14 @@
 import altair as alt
 import pandas as pd
 import streamlit as st
+import json
 #import plotly.express as px
 
 # Utils
 sale_url_template = "https://www.voyage-prive.com/fiche-produit/details/{insert_sale_id}/b1"
 extract_sale_id = lambda sale_id_str: int(''.join(filter(str.isdigit, sale_id_str)))
 display_url_html = lambda url: f'<a href="{url}" target="_blank">View Sale</a>'
+get_dict_from_df = lambda df: df.to_dict(orient='records')[0]
 
 # Show the page title and description.
 st.set_page_config(page_title="Similar Products", page_icon="🏝️")
@@ -25,7 +27,10 @@ st.write(
 def load_data():
     rankings_df = pd.read_csv("data/similar_products_rankings.csv")
     sales_display_names_df = pd.read_csv("data/similar_products_display_names.csv")
-    return rankings_df, sales_display_names_df
+    sales_features_df = pd.read_csv("data/similar_products_features.csv")
+    with open("data/similar_products_feature_cols.json", 'r') as f:
+        sale_feature_cols = json.load(f)
+    return rankings_df, sales_display_names_df, sales_features_df, sale_feature_cols
 
 
 rankings_df, sales_display_names_df = load_data()
