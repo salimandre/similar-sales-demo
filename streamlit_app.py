@@ -29,11 +29,11 @@ def load_data():
     sales_display_names_df = pd.read_csv("data/similar_products_display_names.csv")
     sales_features_df = pd.read_csv("data/similar_products_features.csv")
     with open("data/similar_products_feature_cols.json", 'r') as f:
-        sales_features_cols = json.load(f)
-    return rankings_df, sales_display_names_df, sales_features_df, sales_features_cols
+        sales_features_cols_json = json.load(f)
+    return rankings_df, sales_display_names_df, sales_features_df, sales_features_cols_json
 
 
-rankings_df, sales_display_names_df = load_data()
+rankings_df, sales_display_names_df, sales_features_df, sales_features_cols = load_data()
 
 # Adding selection box by sale display name 
 selected_sale = st.selectbox(
