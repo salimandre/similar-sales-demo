@@ -86,7 +86,7 @@ selected_sale = st.selectbox(
 )
 
 # Get the Sale ID for the selected sale
-#sale_uid_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
+sale_uid_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
 sale_name_to_uid_dict = sales_display_names_df.drop_duplicates().set_index('sale_display_name')['sale_uid'].to_dict()
 selected_sale_uid = sale_name_to_uid_dict.get(selected_sale)
 selected_culture = selected_sale_uid[:5]
@@ -174,10 +174,12 @@ for dim in available_sale_dimensions:
                     #df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
                     
                     # Prepare DataFrame for Altair
+                    sale_name_1 = sale_uid_to_name_dict.get(sale_uid_1)
+                    sale_name_2 = sale_uid_to_name_dict.get(sale_uid_2)
                     df = pd.DataFrame({
                         'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
                         'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
-                        'Source': ['Dict1'] * len(filtered_dict1) + ['Dict2'] * len(filtered_dict2)
+                        'Sales': [sale_name_1] * len(filtered_dict1) + [sale_name_2] * len(filtered_dict2)
                     })
 
                     # Create horizontal bar chart with Altair
@@ -185,8 +187,8 @@ for dim in available_sale_dimensions:
                         x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
                         y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
                         #color='Source:N',
-                        color=alt.Color('Source:N', scale=alt.Scale(scheme='purples')),
-                        tooltip=['Feature:N', 'Value:Q', 'Source:N']
+                        color=alt.Color('Sales:N', scale=alt.Scale(scheme='purples')),
+                        tooltip=['Feature:N', 'Value:Q', 'Sales:N']
                     ).properties(
                         title="Comparison of Features",
                         width=600,
