@@ -69,12 +69,14 @@ def load_data():
 rankings_df, sales_display_names_df, sales_features_df, sales_features_cols_json = load_data()
 
 # Thematic feature df
-location_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['location']]
-pricing_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['pricing']]
-equipment_service_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['equipment_service']]
-stay_type_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['stay_type']]
-accessibility_sales_features_df = sales_features_df[['sale_uid']+sales_features_cols_json['accessibility']]
-
+thematic_features = \
+{
+    "Location": sales_features_df[['sale_uid']+sales_features_cols_json['location']],
+    "Pricing": sales_features_df[['sale_uid']+sales_features_cols_json['pricing']],
+    "Equipment & Services": sales_features_df[['sale_uid']+sales_features_cols_json['equipment_service']],
+    "Stay Type": sales_features_df[['sale_uid']+sales_features_cols_json['stay_type']],
+    "Accessibility": sales_features_df[['sale_uid']+sales_features_cols_json['accessibility']]
+}
 
 # Adding selection box by sale display name 
 selected_sale = st.selectbox(
@@ -152,8 +154,12 @@ for dim in available_sale_dimensions:
 
                 # Condition to display the text based on the toggle state
                 if st.session_state.get(f"show_chart_{dim}_{i}", False):
-                    dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
-                    dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
+                    #dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
+                    #dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
+                    sale_uid_1 = all_top_sales_dict[dim]['sale_uid_a'].iloc[0]
+                    sale_uid_2 = all_top_sales_dict[dim]['sale_uid_b'].iloc[i]
+                    dict1 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_1])
+                    dict2 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_2])
                     common_features, different_features = compare_features(dict1, dict2)
 
                     # Format feature names
