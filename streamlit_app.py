@@ -111,119 +111,126 @@ max_rank = top[1]
 
 selected_rankings_df = rankings_df[rankings_df['sale_uid_a'] == selected_sale_uid]
 
-all_top_sales_dict = {}
-for dim in available_sale_dimensions:
-    if dim in selected_sale_dimensions:
+st.header("🌟 Ranking", help='''Thematic section: sale ranking by dimension | Global section: sale ranking using all dimensions.''')
+thematic_ranking_section, global_ranking_section = st.tabs(["THEMATIC", "GLOBAL"])
 
-        # Prepare top offers
-        dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
-        dim_rank_col = available_sale_dimensions.get(dim) + '__similarity_rank'
-        
-        dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
-        dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]].rename(columns={dim_rank_col: "rank", dim_sim_col: "similarity"})
-        
-        dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
+with thematic_ranking_section:
+    all_top_sales_dict = {}
+    for dim in available_sale_dimensions:
+        if dim in selected_sale_dimensions:
 
-        # Display dimension
-        st.text("\n\n")
-        st.markdown(f"### {available_sale_dimensions_emojis.get(dim)} Top Results for {dim}")
-        #st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
+            # Prepare top offers
+            dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
+            dim_rank_col = available_sale_dimensions.get(dim) + '__similarity_rank'
+            
+            dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
+            dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]].rename(columns={dim_rank_col: "rank", dim_sim_col: "similarity"})
+            
+            dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
 
-        dim_top_sales_df['dimension'] = dim
-        all_top_sales_dict[dim] = dim_top_sales_df
+            # Display dimension
+            st.text("\n\n")
+            st.markdown(f"### {available_sale_dimensions_emojis.get(dim)} Top Results for {dim}")
+            #st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
 
-        for i in range(max_rank - min_rank + 1):
-            # Prepare offer
-            offer = get_dict_from_df(all_top_sales_dict[dim].iloc[[i]])
+            dim_top_sales_df['dimension'] = dim
+            all_top_sales_dict[dim] = dim_top_sales_df
 
-            with st.container():
-                # Display Offer Details
-                col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
-                col1.markdown(f"**#{offer['rank']}**")
-                col2.markdown(f"**Similarity:** {offer['similarity']:.3f}")
-                col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
+            for i in range(max_rank - min_rank + 1):
+                # Prepare offer
+                offer = get_dict_from_df(all_top_sales_dict[dim].iloc[[i]])
 
-                # Add a button in col4 to toggle chart display
-                if col4.button("Explain", key=f"toggle_{dim}_{i}"):
-                    # Toggle the display state in session state
-                    key = f"show_chart_{dim}_{i}"
-                    if key not in st.session_state:
-                        st.session_state[key] = True
-                    else:
-                        st.session_state[key] = not st.session_state[key]
+                with st.container():
+                    # Display Offer Details
+                    col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
+                    col1.markdown(f"**#{offer['rank']}**")
+                    col2.markdown(f"**Similarity:** {offer['similarity']:.3f}")
+                    col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
 
-                # Condition to display the text based on the toggle state
-                if st.session_state.get(f"show_chart_{dim}_{i}", False):
-                    #dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
-                    #dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
-                    sale_uid_1 = all_top_sales_dict[dim]['sale_uid_a'].iloc[0]
-                    sale_uid_2 = all_top_sales_dict[dim]['sale_uid_b'].iloc[i]
-                    dict1 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_1])
-                    dict2 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_2])
-                    common_features, different_features = compare_features(dict1, dict2)
+                    # Add a button in col4 to toggle chart display
+                    if col4.button("Explain", key=f"toggle_{dim}_{i}"):
+                        # Toggle the display state in session state
+                        key = f"show_chart_{dim}_{i}"
+                        if key not in st.session_state:
+                            st.session_state[key] = True
+                        else:
+                            st.session_state[key] = not st.session_state[key]
 
-                    # Format feature names
-                    relevant_keys = set(common_features+different_features)
-                    feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
-                    feats_2 = {k.split('__')[1]: dict2[k] for k in relevant_keys}
+                    # Condition to display the text based on the toggle state
+                    if st.session_state.get(f"show_chart_{dim}_{i}", False):
+                        #dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
+                        #dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
+                        sale_uid_1 = all_top_sales_dict[dim]['sale_uid_a'].iloc[0]
+                        sale_uid_2 = all_top_sales_dict[dim]['sale_uid_b'].iloc[i]
+                        dict1 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_1])
+                        dict2 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_2])
+                        common_features, different_features = compare_features(dict1, dict2)
 
-                    # Remove prefix for the DataFrame display
-                    filtered_dict1 = {k: v for k, v in feats_1.items()}
-                    filtered_dict2 = {k: v for k, v in feats_2.items()}
+                        # Format feature names
+                        relevant_keys = set(common_features+different_features)
+                        feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
+                        feats_2 = {k.split('__')[1]: dict2[k] for k in relevant_keys}
 
-                    #df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
-                    
-                    # Prepare DataFrame for Altair
-                    sale_name_1 = sale_uid_to_name_dict.get(sale_uid_1)
-                    sale_name_2 = sale_uid_to_name_dict.get(sale_uid_2)
-                    df = pd.DataFrame({
-                        'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
-                        'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
-                        'Sales': [sale_name_1] * len(filtered_dict1) + [sale_name_2] * len(filtered_dict2)
-                    })
+                        # Remove prefix for the DataFrame display
+                        filtered_dict1 = {k: v for k, v in feats_1.items()}
+                        filtered_dict2 = {k: v for k, v in feats_2.items()}
 
-                    # Create horizontal bar chart with Altair
-                    chart = alt.Chart(df).mark_bar().encode(
-                        x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
-                        y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
-                        #color='Source:N',
-                        color=alt.Color('Sales:N', scale=alt.Scale(scheme='purples')),
-                        tooltip=['Feature:N', 'Value:Q', 'Sales:N']
-                    ).properties(
-                        title="Comparison of Features",
-                        width=600,
-                        height=400
-                    )
-                    
-                    st.markdown("_Disclaimer: some informations we use such as latitude, longitude, price are not yet displayed here. Stay tuned._")
+                        #df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
+                        
+                        # Prepare DataFrame for Altair
+                        sale_name_1 = sale_uid_to_name_dict.get(sale_uid_1)
+                        sale_name_2 = sale_uid_to_name_dict.get(sale_uid_2)
+                        df = pd.DataFrame({
+                            'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
+                            'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
+                            'Sales': [sale_name_1] * len(filtered_dict1) + [sale_name_2] * len(filtered_dict2)
+                        })
 
-                    st.altair_chart(chart)
+                        # Create horizontal bar chart with Altair
+                        chart = alt.Chart(df).mark_bar().encode(
+                            x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
+                            y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
+                            #color='Source:N',
+                            color=alt.Color('Sales:N', scale=alt.Scale(scheme='purples')),
+                            tooltip=['Feature:N', 'Value:Q', 'Sales:N']
+                        ).properties(
+                            title="Comparison of Features",
+                            width=600,
+                            height=400
+                        )
+                        
+                        st.markdown("_Disclaimer: some informations we use such as latitude, longitude, price are not yet displayed here. Stay tuned._")
 
-st.text("\n\n")
+                        st.altair_chart(chart)
 
-# combine rankings for similarity plot
-st.text("\n\n")
-combined_dim_top_sales_df = pd.concat(
-    all_top_sales_dict.values(),
-    ignore_index=True
-)
+    st.text("\n\n")
 
-chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
-    x=alt.X('rank:Q', title='Rank'),
-    y=alt.Y('similarity:Q', title='Similarity', scale=alt.Scale(domain=[0, 1])),
-    color=alt.Color(
-        'dimension:N',
-        title='Dimension',
-        scale=alt.Scale(scheme='category10')
-    ),
-    tooltip=['rank', 'similarity', 'dimension']  # Add tooltips for interactivity
-).properties(
-    width=800,
-    height=400,
-    title="Rank vs. Similarity by Dimension"
-)
+    # combine rankings for similarity plot
+    st.text("\n\n")
+    combined_dim_top_sales_df = pd.concat(
+        all_top_sales_dict.values(),
+        ignore_index=True
+    )
 
-st.altair_chart(chart, use_container_width=True)
+    chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
+        x=alt.X('rank:Q', title='Rank'),
+        y=alt.Y('similarity:Q', title='Similarity', scale=alt.Scale(domain=[0, 1])),
+        color=alt.Color(
+            'dimension:N',
+            title='Dimension',
+            scale=alt.Scale(scheme='category10')
+        ),
+        tooltip=['rank', 'similarity', 'dimension']  # Add tooltips for interactivity
+    ).properties(
+        width=800,
+        height=400,
+        title="Rank vs. Similarity by Dimension"
+    )
+
+    st.altair_chart(chart, use_container_width=True)
+
+with global_ranking_section:
+    st.write("Stay tuned")
 
 # Footer
 st.markdown("---")  # Horizontal line for separation
