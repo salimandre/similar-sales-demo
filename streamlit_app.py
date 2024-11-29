@@ -194,6 +194,8 @@ for dim in available_sale_dimensions:
                         width=600,
                         height=400
                     )
+                    
+                    st.markdown("_Disclaimer: some informations we use such as latitude, longitude, price are not yet displayed here. Stay tuned._")
 
                     st.altair_chart(chart)
 
