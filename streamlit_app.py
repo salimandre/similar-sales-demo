@@ -101,7 +101,7 @@ st.markdown(f"You selected: [{selected_sale}]({selected_sale_url}) (culture: {se
 selected_sale_dimensions = st.multiselect(
     "Dimensions",
     list(available_sale_dimensions.keys()),
-    ["Location", "Pricing"],
+    ["Location", "Equipment & Services"],
 )
 
 # Show a slider widget with the years using `st.slider`.
