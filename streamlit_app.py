@@ -191,7 +191,7 @@ with thematic_ranking_section:
                             x=alt.X('Value:Q', axis=alt.Axis(title='Value')),
                             y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
                             #color='Source:N',
-                            color=alt.Color('Sales:N', scale=alt.Scale(scheme='purples')),
+                            color=alt.Color('Sales:N', scale=alt.Scale(range=['#e74c3c', '#2874a6'])),
                             tooltip=['Feature:N', 'Value:Q', 'Sales:N']
                         ).properties(
                             title="Comparison of Features",
