@@ -2,9 +2,6 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 import json
-#import matplotlib.pyplot as plt
-#import numpy as np
-#import plotly.express as px
 
 # Utils
 sale_url_template = "https://www.voyage-prive.com/fiche-produit/details/{insert_sale_id}/b1"
