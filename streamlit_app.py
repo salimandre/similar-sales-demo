@@ -191,15 +191,15 @@ with thematic_ranking_section:
                             column=alt.Column('Sales:N', title='Sales'),  # Separate bars by Sales
                             x=alt.X(
                                 'Value:Q', 
-                                axis=alt.Axis(title='Value', values=[0, 1], format='.0f'),  # Explicit x-axis values
-                                scale=alt.Scale(domain=[0, 1])  # Force domain to integers 0 and 1
+                                axis=alt.Axis(title='Value', values=[0, 1], format='.0f'),
+                                scale=alt.Scale(domain=[0, 1])
                             ),
-                            y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),  # Sort by values in descending order
-                            color=alt.Color('Sales:N', scale=alt.Scale(range=['#e74c3c', '#2874a6'])),  # Color by Sales
+                            y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
+                            color=alt.Color('Sales:N', scale=alt.Scale(range=['#e74c3c', '#2874a6']),legend=None),
                             tooltip=['Feature:N', 'Value:Q', 'Sales:N']
                         ).properties(
                             title="Comparison of Features",
-                            width=300,  # Adjusted width for each column
+                            width=300,
                             height=400
                         )
                         
