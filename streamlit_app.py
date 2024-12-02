@@ -192,8 +192,8 @@ def main():
             ignore_index=True
         )
 
-        st.text("\n\n")
-        st.text("\n\n")
+        st.text("\n\n\n\n")
+        st.text("voila")
 
         # display chart rank v similarity
         display_chart_rank_v_similarity(combined_dim_top_sales_df)
