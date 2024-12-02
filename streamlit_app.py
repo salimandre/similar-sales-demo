@@ -72,7 +72,7 @@ def main():
         
         # Display dimension
         st.text("\n\n")
-        st.markdown(f"### {available_sale_dimensions_emojis.get('Global')} Top Results for Global Similarity")
+        st.markdown(f"### {available_sale_dimensions_emojis.get('Global')} Top Results")
         
         for i in range(max_rank - min_rank + 1):
 
