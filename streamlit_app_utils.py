@@ -6,7 +6,7 @@ import json
 
 # Constants and configuration
 PAGE_CONFIG = {"page_title": "Similar Products", "page_icon": "🏝️"}
-DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Pricing", "Equipment & Services", "Stay Type"], "Top": (1, 3)}
+DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Pricing", "Equipment & Services", "Stay Type", "Accessibility"], "Top": (1, 3)}
 DATA_FILES = {
     "rankings": "data/similar_products_rankings.csv",
     "display_names": "data/similar_products_display_names.csv",
