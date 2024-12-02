@@ -75,10 +75,11 @@ def main():
                 selected_rankings_df['weighted_similarity'] += similarity_weights[dim] * selected_rankings_df[dim_sim_col]
 
         # Get the weighted global ranking
-        dim_top_sales_df = selected_rankings_df.sort_values(by='weighted_similarity', ascending=False).iloc[min_rank-1:max_rank]
-        dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]].rename(columns={dim_rank_col: "rank", dim_sim_col: "similarity"})
+        global_top_sales_df = selected_rankings_df.sort_values(by='weighted_similarity', ascending=False).iloc[min_rank-1:max_rank]
+        global_top_sales_df['weighted_similarity_rank'] = global_top_sales_df['weighted_similarity'].rank(method='min', ascending=False)
+        global_top_sales_df = global_top_sales_df[["sale_uid_a", "sale_uid_b", 'weighted_similarity', 'weighted_similarity_rank']].rename(columns={"weighted_similarity_rank": "rank", "weighted_similarity": "similarity"})
         
-        dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
+        global_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in global_top_sales_df["sale_uid_b"]]
         
         # Display dimension
         st.text("\n\n")
@@ -87,7 +88,7 @@ def main():
         for i in range(max_rank - min_rank + 1):
 
             # Prepare offer
-            offer = get_dict_from_df(dim_top_sales_df.iloc[[i]])
+            offer = get_dict_from_df(global_top_sales_df.iloc[[i]])
 
             with st.container():
                 # Display Offer Details
@@ -98,8 +99,8 @@ def main():
 
         # display chart rank v similarity
         st.markdown("<br><br>", unsafe_allow_html=True)
-        dim_top_sales_df['dimension'] = 'global'
-        display_chart_rank_v_similarity(dim_top_sales_df)
+        global_top_sales_df['dimension'] = 'global'
+        display_chart_rank_v_similarity(global_top_sales_df)
 
 
     with thematic_ranking_section:
