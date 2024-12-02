@@ -76,7 +76,7 @@ def main():
 
         # Get the weighted global ranking
         global_top_sales_df = selected_rankings_df.sort_values(by='weighted_similarity', ascending=False).iloc[min_rank-1:max_rank]
-        global_top_sales_df['weighted_similarity_rank'] = global_top_sales_df['weighted_similarity'].rank(method='first', ascending=False)
+        global_top_sales_df['weighted_similarity_rank'] = global_top_sales_df['weighted_similarity'].rank(method='first', ascending=False).astype(int)
         global_top_sales_df = global_top_sales_df[["sale_uid_a", "sale_uid_b", 'weighted_similarity', 'weighted_similarity_rank']].rename(columns={"weighted_similarity_rank": "rank", "weighted_similarity": "similarity"})
         
         global_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in global_top_sales_df["sale_uid_b"]]
