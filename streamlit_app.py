@@ -65,17 +65,17 @@ def main():
         
         # Step 2: Allow users to assign weights to each selected dimension
         similarity_weights = {}
+        selected_rankings_df['weighted_similarity'] = 0
         if selected_sale_dimensions:
             st.write("Assign weights to each selected dimension (sum should ideally be 1):")
-            for dimension in selected_sale_dimensions:
-                default_weight_dim = DEFAULT_SELECTIONS.get('Weights').get(dimension)
-                similarity_weights[dimension] = st.slider(f"{dimension}", min_value=0.0, max_value=1.0, value=default_weight_dim, step=0.05)
+            for dim in selected_sale_dimensions:
+                default_weight_dim = DEFAULT_SELECTIONS.get('Weights').get(dim)
+                similarity_weights[dim] = st.slider(f"{dim}", min_value=0.0, max_value=1.0, value=default_weight_dim, step=0.05)
+                dim_sim_col = available_sale_dimensions.get(dim) + '__similarity'
+                selected_rankings_df['weighted_similarity'] += similarity_weights[dim] * selected_rankings_df[dim_sim_col]
 
-        # Get the global ranking
-        dim_sim_col = 'similarity'
-        dim_rank_col = 'similarity_rank'
-        
-        dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
+        # Get the weighted global ranking
+        dim_top_sales_df = selected_rankings_df.sort_values(by='weighted_similarity', ascending=False).iloc[min_rank-1:max_rank]
         dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]].rename(columns={dim_rank_col: "rank", dim_sim_col: "similarity"})
         
         dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
