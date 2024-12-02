@@ -69,7 +69,7 @@ def main():
             st.write("Assign weights to each selected dimension (sum should ideally be 1):")
             for dimension in selected_sale_dimensions:
                 default_weight_dim = DEFAULT_SELECTIONS.get('Weights').get(dimension)
-                similarity_weights[dimension] = st.slider(f"Weight for {dimension}", min_value=0.0, max_value=1.0, value=default_weight_dim, step=0.05)
+                similarity_weights[dimension] = st.slider(f"{dimension}", min_value=0.0, max_value=1.0, value=default_weight_dim, step=0.05)
 
         # Get the global ranking
         dim_sim_col = 'similarity'
