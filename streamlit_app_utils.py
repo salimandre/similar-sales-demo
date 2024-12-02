@@ -35,7 +35,8 @@ def get_utils():
         "Pricing": "💰",
         "Stay Type": "🕶️",
         "Equipment & Services": "⛳",
-        "Accessibility": "♿"
+        "Accessibility": "♿",
+        "Global": "🌐"
     }
 
     return sale_url_template, extract_sale_id, display_url_html, \

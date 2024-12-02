@@ -59,7 +59,32 @@ def main():
     selected_rankings_df = rankings_df[rankings_df['sale_uid_a'] == selected_sale_uid]
 
     st.header("🌟 Ranking", help='''Thematic section: sale ranking by dimension | Global section: sale ranking using all dimensions.''')
-    thematic_ranking_section, global_ranking_section = st.tabs(["THEMATIC", "GLOBAL"])
+    global_ranking_section, thematic_ranking_section = st.tabs(["GLOBAL", "THEMATIC"])
+
+    with global_ranking_section:
+        dim_sim_col = 'similarity'
+        dim_rank_col = 'similarity_rank'
+        
+        dim_top_sales_df = selected_rankings_df.sort_values(by=dim_rank_col, ascending=True).iloc[min_rank-1:max_rank]
+        dim_top_sales_df = dim_top_sales_df[["sale_uid_a", "sale_uid_b", dim_rank_col, dim_sim_col]].rename(columns={dim_rank_col: "rank", dim_sim_col: "similarity"})
+        
+        dim_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in dim_top_sales_df["sale_uid_b"]]
+        
+        # Display dimension
+        st.text("\n\n")
+        st.markdown(f"### {available_sale_dimensions_emojis.get('Global')} Top Results for Global Similarity")
+        
+        for i in range(max_rank - min_rank + 1):
+
+            # Prepare offer
+            offer = get_dict_from_df(dim_top_sales_df.iloc[[i]])
+
+            with st.container():
+                # Display Offer Details
+                col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
+                col1.markdown(f"**#{offer['rank']}**")
+                col2.markdown(f"**Similarity:** {offer['similarity']:.3f}")
+                col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
 
     with thematic_ranking_section:
         all_top_sales_dict = {}
@@ -78,7 +103,6 @@ def main():
                 # Display dimension
                 st.text("\n\n")
                 st.markdown(f"### {available_sale_dimensions_emojis.get(dim)} Top Results for {dim}")
-                #st.markdown(dim_top_sales_df[['rank', 'similarity', 'sale_url']].to_html(escape=False, index=False), unsafe_allow_html=True)
 
                 dim_top_sales_df['dimension'] = dim
                 all_top_sales_dict[dim] = dim_top_sales_df
@@ -159,9 +183,6 @@ def main():
 
         # display chart rank v similarity
         display_chart_rank_v_similarity(all_top_sales_dict)
-
-    with global_ranking_section:
-        st.write("Stay tuned")
 
     # Footer
     st.markdown("---")  # Horizontal line for separation
