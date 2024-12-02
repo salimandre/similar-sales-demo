@@ -48,11 +48,11 @@ def main():
     selected_sale_dimensions = st.multiselect(
         "Dimensions",
         list(available_sale_dimensions.keys()),
-        ["Location", "Equipment & Services"],
+        DEFAULT_SELECTIONS.get("Dimensions"),
     )
 
     # Show a slider widget with the years using `st.slider`.
-    top = st.slider("Top", 1, 10, (1, 5))
+    top = st.slider("Top", 1, 20, DEFAULT_SELECTIONS.get("Top"))
     min_rank = top[0]
     max_rank = top[1]
 
