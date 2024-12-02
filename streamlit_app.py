@@ -93,6 +93,47 @@ def load_data():
 
     return rankings_df, sales_display_names_df, sales_features_df, sales_features_cols_json, thematic_features
 
+# Get the Sale ID for the selected sale
+def get_selected_sale_details(sales_display_names_df, selected_sale_name):
+    _, extract_sale_id, _, _, _, _ = get_utils()
+
+    sale_uid_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
+    sale_name_to_uid_dict = sales_display_names_df.drop_duplicates().set_index('sale_display_name')['sale_uid'].to_dict()
+    selected_sale_uid = sale_name_to_uid_dict.get(selected_sale_name)
+    selected_culture = selected_sale_uid[:5]
+    selected_sale_id = extract_sale_id(selected_sale_uid)
+
+    return selected_culture, selected_sale_uid, selected_sale_id, sale_name_to_uid_dict, sale_uid_to_name_dict
+
+def display_chart_rank_v_similarity(all_top_sales_dict):
+    """
+    Creates and displays an Altair chart visualizing rankings and similarities across different dimensions.
+    Args:
+        all_top_sales_dict (dict): A dictionary where keys are dimensions and values are DataFrames with ranking data.
+    """
+    # combine rankings for similarity plot
+    combined_dim_top_sales_df = pd.concat(
+        all_top_sales_dict.values(),
+        ignore_index=True
+    )
+
+    chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
+        x=alt.X('rank:Q', title='Rank'),
+        y=alt.Y('similarity:Q', title='Similarity', scale=alt.Scale(domain=[0, 1])),
+        color=alt.Color(
+            'dimension:N',
+            title='Dimension',
+            scale=alt.Scale(scheme='category10')
+        ),
+        tooltip=['rank', 'similarity', 'dimension']  # Add tooltips for interactivity
+    ).properties(
+        width=800,
+        height=400,
+        title="Rank vs. Similarity by Dimension"
+    )
+
+    st.altair_chart(chart, use_container_width=True)
+
 def main():
     # Utils
     sale_url_template, extract_sale_id, display_url_html, \
@@ -121,11 +162,7 @@ def main():
     )
 
     # Get the Sale ID for the selected sale
-    sale_uid_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
-    sale_name_to_uid_dict = sales_display_names_df.drop_duplicates().set_index('sale_display_name')['sale_uid'].to_dict()
-    selected_sale_uid = sale_name_to_uid_dict.get(selected_sale)
-    selected_culture = selected_sale_uid[:5]
-    selected_sale_id = extract_sale_id(selected_sale_uid)
+    selected_culture, selected_sale_uid, selected_sale_id, sale_name_to_uid_dict, sale_uid_to_name_dict = get_selected_sale_details(sales_display_names_df, selected_sale)
 
     # Display the Sale URL to the user
     #st.write(f"You selected: {selected_sale}")
@@ -243,30 +280,10 @@ def main():
                             st.altair_chart(chart)
 
         st.text("\n\n")
-
-        # combine rankings for similarity plot
         st.text("\n\n")
-        combined_dim_top_sales_df = pd.concat(
-            all_top_sales_dict.values(),
-            ignore_index=True
-        )
 
-        chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
-            x=alt.X('rank:Q', title='Rank'),
-            y=alt.Y('similarity:Q', title='Similarity', scale=alt.Scale(domain=[0, 1])),
-            color=alt.Color(
-                'dimension:N',
-                title='Dimension',
-                scale=alt.Scale(scheme='category10')
-            ),
-            tooltip=['rank', 'similarity', 'dimension']  # Add tooltips for interactivity
-        ).properties(
-            width=800,
-            height=400,
-            title="Rank vs. Similarity by Dimension"
-        )
-
-        st.altair_chart(chart, use_container_width=True)
+        # display chart rank v similarity
+        display_chart_rank_v_similarity(all_top_sales_dict)
 
     with global_ranking_section:
         st.write("Stay tuned")
