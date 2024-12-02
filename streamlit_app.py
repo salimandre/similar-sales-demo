@@ -87,7 +87,7 @@ def main():
                 col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
 
         # display chart rank v similarity
-        st.text("\n\n\n\n\n\n")
+        st.markdown("<br><br>", unsafe_allow_html=True)
         dim_top_sales_df['dimension'] = 'global'
         display_chart_rank_v_similarity(dim_top_sales_df)
 
@@ -184,7 +184,7 @@ def main():
 
                             st.altair_chart(chart)
 
-        st.text("\n\n\n\n\n\n")
+        st.markdown("<br><br>", unsafe_allow_html=True)
 
         # combine rankings for similarity plot
         combined_dim_top_sales_df = pd.concat(
