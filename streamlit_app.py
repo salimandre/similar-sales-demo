@@ -86,6 +86,11 @@ def main():
                 col2.markdown(f"**Similarity:** {offer['similarity']:.3f}")
                 col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
 
+        # display chart rank v similarity
+        dim_top_sales_df['dimension'] = 'global'
+        display_chart_rank_v_similarity(dim_top_sales_df)
+
+
     with thematic_ranking_section:
         all_top_sales_dict = {}
         for dim in available_sale_dimensions:
@@ -181,8 +186,14 @@ def main():
         st.text("\n\n")
         st.text("\n\n")
 
+        # combine rankings for similarity plot
+        combined_dim_top_sales_df = pd.concat(
+            all_top_sales_dict.values(),
+            ignore_index=True
+        )
+
         # display chart rank v similarity
-        display_chart_rank_v_similarity(all_top_sales_dict)
+        display_chart_rank_v_similarity(combined_dim_top_sales_df)
 
     # Footer
     st.markdown("---")  # Horizontal line for separation

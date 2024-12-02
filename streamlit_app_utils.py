@@ -109,20 +109,14 @@ def get_selected_sale_details(sales_display_names_df, selected_sale_name):
 
     return selected_culture, selected_sale_uid, selected_sale_id, sale_name_to_uid_dict, sale_uid_to_name_dict
 
-def display_chart_rank_v_similarity(all_top_sales_dict):
+def display_chart_rank_v_similarity(ranking_df):
     """
     Creates and displays an Altair chart visualizing rankings and similarities across different dimensions.
     Args:
-        all_top_sales_dict (dict): A dictionary where keys are dimensions and values are DataFrames with ranking data.
+        combined_dim_top_sales_df : A pd.DataFrame with ranking data.
     """
-    # combine rankings for similarity plot
-    combined_dim_top_sales_df = pd.concat(
-        all_top_sales_dict.values(),
-        ignore_index=True
-    )
-
-    chart = alt.Chart(combined_dim_top_sales_df).mark_circle(size=100).encode(
-        x=alt.X('rank:Q', title='Rank'),
+    chart = alt.Chart(ranking_df).mark_circle(size=100).encode(
+        x=alt.X('rank:O', title='Rank'),
         y=alt.Y('similarity:Q', title='Similarity', scale=alt.Scale(domain=[0, 1])),
         color=alt.Color(
             'dimension:N',
