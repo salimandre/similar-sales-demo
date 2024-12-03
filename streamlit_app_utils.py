@@ -85,7 +85,7 @@ def compare_features(dict1, dict2):
 
 # Load the data from a CSV. We're caching this so it doesn't reload every time the app
 # reruns (e.g. if the user interacts with the widgets).
-@st.cache_data
+#@st.cache_data
 def load_data():
     rankings_df = load_csv(DATA_FILES["rankings"])
     sales_display_names_df = load_csv(DATA_FILES["display_names"])
