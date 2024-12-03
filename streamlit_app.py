@@ -2,7 +2,6 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 import numpy as np
-import json
 
 from streamlit_app_utils import PAGE_CONFIG, DEFAULT_SELECTIONS, DATA_FILES, \
     get_utils, load_json_file, load_csv, \
