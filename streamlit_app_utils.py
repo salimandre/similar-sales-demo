@@ -32,6 +32,11 @@ def get_utils():
             "Accessibility": "accessibility"
         }
 
+    available_sale_dimensions_inv =  \
+        {
+            v: k for k, v in available_sale_dimensions.items()
+        }
+
     available_sale_dimensions_emojis = {
         "Location": "📍",
         "Pricing": "💰",
@@ -42,7 +47,7 @@ def get_utils():
     }
 
     return sale_url_template, extract_sale_id, display_url_html, \
-                get_dict_from_df, available_sale_dimensions, \
+                get_dict_from_df, available_sale_dimensions, available_sale_dimensions_inv, \
                     available_sale_dimensions_emojis
 
 def load_json_file(filepath):
@@ -101,7 +106,7 @@ def load_data():
 
 # Get the Sale ID for the selected sale
 def get_selected_sale_details(sales_display_names_df, selected_sale_name):
-    _, extract_sale_id, _, _, _, _ = get_utils()
+    _, extract_sale_id, _, _, _, _, _ = get_utils()
 
     sale_uid_to_name_dict = sales_display_names_df.drop_duplicates().set_index('sale_uid')['sale_display_name'].to_dict()
     sale_name_to_uid_dict = sales_display_names_df.drop_duplicates().set_index('sale_display_name')['sale_uid'].to_dict()

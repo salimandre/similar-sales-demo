@@ -1,6 +1,7 @@
 import altair as alt
 import pandas as pd
 import streamlit as st
+import numpy as np
 import json
 
 from streamlit_app_utils import PAGE_CONFIG, DEFAULT_SELECTIONS, DATA_FILES, \
@@ -12,7 +13,7 @@ from streamlit_app_utils import PAGE_CONFIG, DEFAULT_SELECTIONS, DATA_FILES, \
 def main():
     # Utils
     sale_url_template, extract_sale_id, display_url_html, \
-    get_dict_from_df, available_sale_dimensions, \
+    get_dict_from_df, available_sale_dimensions, available_sale_dimensions_inv, \
     available_sale_dimensions_emojis = get_utils()
 
     # Show the page title and description.
@@ -77,14 +78,16 @@ def main():
         # Get the weighted global ranking
         global_top_sales_df = selected_rankings_df.sort_values(by='weighted_similarity', ascending=False).iloc[min_rank-1:max_rank]
         global_top_sales_df['weighted_similarity_rank'] = global_top_sales_df['weighted_similarity'].rank(method='first', ascending=False).astype(int)
-        global_top_sales_df = global_top_sales_df[["sale_uid_a", "sale_uid_b", 'weighted_similarity', 'weighted_similarity_rank']].rename(columns={"weighted_similarity_rank": "rank", "weighted_similarity": "similarity"})
         
+        global_top_sales_df.drop(columns=['similarity', 'similarity_rank'], inplace=True)
+        global_top_sales_df = global_top_sales_df.rename(columns={"weighted_similarity_rank": "rank", "weighted_similarity": "similarity"})
+
         global_top_sales_df['sale_url'] = [display_url_html(sale_url_template.format(insert_sale_id=extract_sale_id(s_uid))) for s_uid in global_top_sales_df["sale_uid_b"]]
-        
+
         # Display dimension
         st.text("\n\n")
         st.markdown(f"### {available_sale_dimensions_emojis.get('Global')} Top Results")
-        
+
         for i in range(max_rank - min_rank + 1):
 
             # Prepare offer
@@ -93,9 +96,45 @@ def main():
             with st.container():
                 # Display Offer Details
                 col1, col2, col3, col4 = st.columns([1, 2, 2, 1])
-                col1.markdown(f"**#{offer['rank']}**")
+                col1.markdown(f"**#{i+1}**")
                 col2.markdown(f"**Similarity:** {offer['similarity']:.3f}")
                 col3.markdown(f"{offer['sale_url']}", unsafe_allow_html=True)
+
+                # Add a button in col4 to toggle chart display
+                if col4.button("Explain", key=f"toggle_global_{i}"):
+                    # Toggle the display state in session state
+                    key = f"show_chart_global_{i}"
+                    if key not in st.session_state:
+                        st.session_state[key] = True
+                    else:
+                        st.session_state[key] = not st.session_state[key]
+
+                # Condition to display the text based on the toggle state
+                if st.session_state.get(f"show_chart_global_{i}", False):
+                    sale_uid_1 = global_top_sales_df['sale_uid_a'].iloc[0]
+                    sale_uid_2 = global_top_sales_df['sale_uid_b'].iloc[i]
+                    dict2 = get_dict_from_df(global_top_sales_df[global_top_sales_df['sale_uid_b'] == sale_uid_2])
+                    #st.write(dict2)
+                    
+                    df = pd.DataFrame(
+                        [{'Dimension': k.split('__')[0], 'Type': 'Raw', 'Similarity': dict2[k]} for k in dict2 if k.endswith("__similarity")] \
+                        + [{'Dimension': k.split('__')[0], 'Type': 'Weighted', 'Similarity': dict2[k]*similarity_weights[available_sale_dimensions_inv.get(k.split('__')[0])]} for k in dict2 if k.endswith("__similarity")]
+                    )
+
+                    df['Dimension_Type'] = np.where(df['Type'] == 'Raw', df['Dimension'], df['Dimension'] + ' ')
+                    df = df.sort_values(by='Dimension_Type', ascending=True)
+                    
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    chart = alt.Chart(df).mark_bar().encode(
+                        x=alt.X('Dimension_Type:N', axis=alt.Axis(title='Dimension'), sort=None),
+                        y=alt.Y('Similarity:Q', axis=alt.Axis(title='Similarity')),
+                        color='Type:N'
+                    ).properties(
+                        width=450,
+                        height=450
+                    )
+
+                    chart
 
         # display chart rank v similarity
         st.markdown("<br><br>", unsafe_allow_html=True)
@@ -146,8 +185,6 @@ def main():
 
                         # Condition to display the text based on the toggle state
                         if st.session_state.get(f"show_chart_{dim}_{i}", False):
-                            #dict1 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr412030'])
-                            #dict2 = get_dict_from_df(location_sales_features_df[location_sales_features_df['sale_uid'] == 'fr_fr411914'])
                             sale_uid_1 = all_top_sales_dict[dim]['sale_uid_a'].iloc[0]
                             sale_uid_2 = all_top_sales_dict[dim]['sale_uid_b'].iloc[i]
                             dict1 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_1])
@@ -220,3 +257,51 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+    def prepare_data(data_dict):
+        rows = []
+        for key, value in data_dict.items():
+            parts = key.rsplit('_', 1)  # Split on the last underscore only
+            if len(parts) == 2:
+                dimension, type_ = parts
+                dimension = dimension.replace('_', ' ').capitalize()  # Format dimension name
+                type_ = 'Weighted' if 'weighted' in type_.lower() else 'Raw'
+                rows.append({
+                    'Dimension': dimension,
+                    'Type': type_,
+                    'Value': value
+                })
+        return pd.DataFrame(rows)
+
+    # Example data
+    data = {
+        "location_similarity": 0.8,
+        "location_weighted": 0.3 * 0.8,
+        "pricing_similarity": 0.6,
+        "pricing_weighted": 0.25 * 0.6,
+        "stay_type_similarity": 0.7,
+        "stay_type_weighted": 0.45 * 0.7
+    }
+
+    # Prepare the DataFrame
+    df = prepare_data(data)
+
+    st.write(df)
+
+    # Create the Altair chart
+    # Create a new column for grouping dimension and type in the x-axis
+    df['Dimension_Type'] = df['Dimension'] + ' - ' + df['Type']
+
+    # Create the Altair chart
+    chart = alt.Chart(df).mark_bar().encode(
+        x=alt.X('Dimension_Type:N', axis=alt.Axis(title='Dimension and Type'), sort=None),
+        y=alt.Y('Value:Q', axis=alt.Axis(title='Value')),
+        color='Type:N'
+    ).properties(
+        width=450,
+        height=450
+    )
+
+    # Display the chart
+    chart
