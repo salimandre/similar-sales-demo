@@ -2,7 +2,7 @@
 
 A simple Streamlit app showing similar products results. 
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://movies-dataset-template.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://utmb.world/fr/runner/6692410.gautier.loveiko)
 
 ### How to run it on your own machine
 
