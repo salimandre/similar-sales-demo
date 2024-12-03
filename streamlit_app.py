@@ -225,7 +225,7 @@ def main():
                             ).properties(
                                 title="Comparison of Features",
                                 width=300,
-                                height=400
+                                height=150
                             )
                             
                             st.markdown("_Disclaimer: some informations we use such as latitude, longitude, price are not yet displayed here. Stay tuned._")
