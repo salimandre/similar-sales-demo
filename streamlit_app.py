@@ -130,7 +130,7 @@ def main():
                         y=alt.Y('Similarity:Q', axis=alt.Axis(title='Similarity')),
                         color='Type:N'
                     ).properties(
-                        width=450,
+                        width=550,
                         height=450
                     )
 
