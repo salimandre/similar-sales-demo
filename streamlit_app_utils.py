@@ -2,6 +2,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 import json
+import os
 
 
 # Constants and configuration
@@ -10,7 +11,7 @@ DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Pricing", "Equipment & Service
                       "Top": (1, 3),
                       "Weights": {"Location": 0.3, "Pricing": 0.2, "Equipment & Services": 0.15, "Stay Type": 0.3, "Accessibility": 0.05}}
 DATA_FILES = {
-    "rankings": "data/similar_products_rankings.csv",
+    "rankings": "data/similar_products_rankings_part.csv",
     "display_names": "data/similar_products_display_names.csv",
     "features": "data/similar_products_features.csv",
     "feature_cols": "data/similar_products_feature_cols.json"
@@ -60,12 +61,23 @@ def load_json_file(filepath):
         return {}
 
 def load_csv(filepath):
-    try:
-        return pd.read_csv(filepath)
-    except Exception as e:
-        st.error(f"Failed to load CSV file: {filepath}")
-        st.exception(e)
-        return pd.DataFrame()
+    if filepath.endswith('part.csv'):
+        directory_path = os.path.dirname(filepath)
+        df_chunk_ls = []
+        for filename in sorted(os.listdir(directory_path)):
+            file_chunk_indicator, _ = os.path.splitext(os.path.basename(filepath))
+            if file_chunk_indicator in filename and filename.endswith(".csv"):
+                chunk_file_path = os.path.join(directory_path, filename)
+                df_chunk = pd.read_csv(chunk_file_path)
+                df_chunk_ls.append(df_chunk)
+        return pd.concat(df_chunk_ls, ignore_index=True)
+    else:
+        try:
+            return pd.read_csv(filepath)
+        except Exception as e:
+            st.error(f"Failed to load CSV file: {filepath}")
+            st.exception(e)
+            return pd.DataFrame()
 
 # returns the list of common features between 2 sales
 # and the the list of distinct features
