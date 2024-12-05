@@ -96,7 +96,7 @@
   "accessibility": [
     "accessibility__airport_transfers_not_included",
     "accessibility__no_reduced_mobility_support",
-    "accessibility__no_pets_allowed",
+    "accessibility__pets_not_allowed",
     "accessibility__no_children_allowed"
   ]
 }
