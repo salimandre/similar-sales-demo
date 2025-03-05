@@ -94,9 +94,9 @@
     "equipment_service__steam_bath"
   ],
   "accessibility": [
-    "accessibility__airport_transfers_not_included",
-    "accessibility__no_reduced_mobility_support",
+    "accessibility__no_airport_shuttle_included",
+    "accessibility__not_reduced_mobility_friendly",
     "accessibility__pets_not_allowed",
-    "accessibility__no_children_allowed"
+    "accessibility__adult_only"
   ]
 }
