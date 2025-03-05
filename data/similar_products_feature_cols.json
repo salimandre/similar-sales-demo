@@ -53,7 +53,7 @@
     "stay_type__profile_single",
     "stay_type__profile_family",
     "stay_type__profile_adult_only",
-    "stay_type__capacity_6_or_more"
+    "stay_type__profile_capacity_6_or_more"
   ],
   "pricing": [
     "pricing__display_type_price",
