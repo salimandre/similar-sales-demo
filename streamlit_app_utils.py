@@ -7,9 +7,9 @@ import os
 
 # Constants and configuration
 PAGE_CONFIG = {"page_title": "Similar Products", "page_icon": "🏝️"}
-DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Pricing", "Equipment & Services", "Stay Type", "Accessibility"], 
+DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Landscape", "Pricing", "Stay Type", "Accessibility", "Wellness", "Family", "Activity"], 
                       "Top": (1, 3),
-                      "Weights": {"Location": 0.3, "Pricing": 0.2, "Equipment & Services": 0.15, "Stay Type": 0.3, "Accessibility": 0.05}}
+                      "Weights": {"Location": 0.03, "Landscape": 0.27, "Pricing": 0.15, "Stay Type": 0.2, "Accessibility": 0.1, "Wellness": 0.1, "Family": 0.1, "Activity": 0.05}}
 DATA_FILES = {
     "rankings": "data/similar_products_rankings_part.csv",
     "display_names": "data/similar_products_display_names.csv",
@@ -27,10 +27,13 @@ def get_utils():
     available_sale_dimensions =  \
         {
             "Location": "location",
+            "Landscape": "landscape",
             "Pricing": "pricing", 
             "Stay Type": "stay_type",
-            "Equipment & Services": "equipment_service",
-            "Accessibility": "accessibility"
+            "Accessibility": "accessibility",
+            "Wellness": "wellness",
+            "Family": "family",
+            "Activity": "activity"
         }
 
     available_sale_dimensions_inv =  \
@@ -40,10 +43,13 @@ def get_utils():
 
     available_sale_dimensions_emojis = {
         "Location": "📍",
+        "Landscape": "⛰️",
         "Pricing": "💰",
-        "Stay Type": "🕶️",
-        "Equipment & Services": "⛳",
+        "Stay Type": "✈️",
         "Accessibility": "♿",
+        "Wellness": "💆🏻‍♀️",
+        "Family": "♿",
+        "Activity": "⛳",
         "Global": "🌐"
     }
 
@@ -108,10 +114,13 @@ def load_data():
     thematic_features = \
     {
         "Location": sales_features_df[['sale_uid']+sales_features_cols_json['location']],
+        "Landscape": sales_features_df[['sale_uid']+sales_features_cols_json['landscape']],
         "Pricing": sales_features_df[['sale_uid']+sales_features_cols_json['pricing']],
-        "Equipment & Services": sales_features_df[['sale_uid']+sales_features_cols_json['equipment_service']],
         "Stay Type": sales_features_df[['sale_uid']+sales_features_cols_json['stay_type']],
-        "Accessibility": sales_features_df[['sale_uid']+sales_features_cols_json['accessibility']]
+        "Accessibility": sales_features_df[['sale_uid']+sales_features_cols_json['accessibility']],
+        "Wellness": sales_features_df[['sale_uid']+sales_features_cols_json['wellness']],
+        "Family": sales_features_df[['sale_uid']+sales_features_cols_json['family']],
+        "Activity": sales_features_df[['sale_uid']+sales_features_cols_json['activity']]
     }
 
     return rankings_df, sales_display_names_df, sales_features_df, sales_features_cols_json, thematic_features

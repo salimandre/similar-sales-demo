@@ -1,34 +1,13 @@
 {
   "location": [
-    "location__cluster_asia_oceania",
-    "location__cluster_indian_ocean_middle_east_africa",
-    "location__cluster_latam",
-    "location__cluster_cities_2",
-    "location__cluster_south_med_basin",
-    "location__cluster_greece_crete_cyprus",
-    "location__cluster_northern_europe",
-    "location__cluster_spain_mainland",
-    "location__cluster_canary_and_portugal",
-    "location__cluster_dubai_office",
-    "location__cluster_bam",
-    "location__cluster_us_canada",
-    "location__cluster_france_north_and_mountain",
-    "location__cluster_france_south",
-    "location__cluster_northern_italy",
-    "location__cluster_southern_italy",
-    "location__cluster_cities_1",
+  ],
+  "landscape": [
     "location__spoken_english",
     "location__spoken_spanish",
     "location__spoken_french",
     "location__spoken_portuguese",
     "location__spoken_dutch",
     "location__spoken_arabic",
-    "location__zone_mh",
-    "location__zone_lh",
-    "location__zone_eur",
-    "location__zone_national"
-  ],
-  "stay_type": [
     "stay_type__destination_city_break",
     "stay_type__destination_paradise_on_earth",
     "stay_type__destination_european_island",
@@ -37,7 +16,13 @@
     "stay_type__destination_mountains_and_ski",
     "stay_type__destination_countryside",
     "stay_type__destination_wide_open_space",
-    "stay_type__destination_lake",
+    "stay_type__destination_lake"
+  ],
+  "stay_type": [
+    "location__zone_mh",
+    "location__zone_lh",
+    "location__zone_eur",
+    "location__zone_national",
     "stay_type__travel_single_hotel",
     "stay_type__travel_multi_infra",
     "stay_type__travel_private_tour",
@@ -49,11 +34,7 @@
     "stay_type__board_according_to_program",
     "stay_type__board_no_meal",
     "stay_type__board_full_board",
-    "stay_type__board_all_inclusive",
-    "stay_type__profile_single",
-    "stay_type__profile_family",
-    "stay_type__profile_adult_only",
-    "stay_type__profile_capacity_6_or_more"
+    "stay_type__board_all_inclusive"
   ],
   "pricing": [
     "pricing__display_type_price",
@@ -63,40 +44,40 @@
     "pricing__number_of_stars_4",
     "pricing__number_of_stars_5"
   ],
-  "equipment_service": [
-    "equipment_service__kids_club",
-    "equipment_service__indoor_pool",
-    "equipment_service__hot_tub",
-    "equipment_service__baby_cot",
-    "equipment_service__hammam",
-    "equipment_service__sauna",
-    "equipment_service__microwave",
-    "equipment_service__hair_dryer",
-    "equipment_service__spa",
-    "equipment_service__kitchen",
-    "equipment_service__fitness_center",
-    "equipment_service__bath",
-    "equipment_service__refrigerator",
-    "equipment_service__restaurant",
-    "equipment_service__air_conditioning",
-    "equipment_service__bar",
-    "equipment_service__laundry",
-    "equipment_service__outdoor_pool",
-    "equipment_service__parking",
-    "equipment_service__kids_playground",
-    "equipment_service__shower",
-    "equipment_service__babysitting",
-    "equipment_service__elevator",
-    "equipment_service__private_beach",
-    "equipment_service__hair_salon",
-    "equipment_service__daytime_and_evening_entertainment_program",
-    "equipment_service__nightclub",
-    "equipment_service__steam_bath"
-  ],
   "accessibility": [
     "accessibility__no_airport_shuttle_included",
     "accessibility__not_reduced_mobility_friendly",
     "accessibility__pets_not_allowed",
-    "accessibility__adult_only"
+    "equipment_service__parking",
+    "equipment_service__elevator"
+  ],
+  "wellness": [
+    "equipment_service__indoor_pool",
+    "equipment_service__outdoor_pool",
+    "equipment_service__hot_tub",
+    "equipment_service__hammam",
+    "equipment_service__sauna",
+    "equipment_service__spa",
+    "equipment_service__fitness_center",
+    "equipment_service__private_beach",
+    "equipment_service__hair_salon",
+    "equipment_service__steam_bath"
+  ],
+  "family": [
+    "equipment_service__kids_club",
+    "equipment_service__baby_cot",
+    "equipment_service__microwave",
+    "equipment_service__kitchen",
+    "equipment_service__kids_playground",
+    "equipment_service__babysitting",
+    "accessibility__adult_only",
+    "stay_type__profile_single",
+    "stay_type__profile_family",
+    "stay_type__profile_adult_only",
+    "stay_type__profile_capacity_6_or_more"
+  ],
+  "activity": [
+    "equipment_service__daytime_and_evening_entertainment_program",
+    "equipment_service__nightclub"
   ]
 }
