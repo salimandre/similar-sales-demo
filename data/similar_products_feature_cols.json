@@ -1,4 +1,7 @@
 {
+  "location": [
+    "location__infrastructure_geopoint"
+  ],
   "landscape": [
     "location__spoken_english",
     "location__spoken_spanish",
