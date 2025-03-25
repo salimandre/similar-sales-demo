@@ -189,7 +189,8 @@ def main():
                             dict1 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_1])
                             dict2 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_2])
                             common_features, different_features = compare_features(dict1, dict2)
-
+                            st.write(dict2)
+                            
                             # Format feature names
                             relevant_keys = set(common_features+different_features)
                             feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
@@ -247,7 +248,7 @@ def main():
     st.markdown(
         """
         <div style='text-align: center;'>
-            Made with 💖 by <strong>Gautier</strong>, <strong>Jean-Luc</strong> and <strong>Corentin</strong>
+            Made with 💖 by <strong>DATA</strong>
         </div>
         """,
         unsafe_allow_html=True
