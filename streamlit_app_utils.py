@@ -7,7 +7,7 @@ import os
 
 # Constants and configuration
 PAGE_CONFIG = {"page_title": "Similar Products", "page_icon": "🏝️"}
-DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Landscape", "Pricing", "Stay Type", "Accessibility", "Wellness", "Family", "Activity"], 
+DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Landscape", "Pricing", "Fundamentals", "Accessibility", "Wellness", "Family", "Activity"], 
                       "Top": (1, 3),
                       "Weights": {"Location": 0.03, "Landscape": 0.27, "Pricing": 0.15, "Stay Type": 0.2, "Accessibility": 0.1, "Wellness": 0.1, "Family": 0.1, "Activity": 0.05}}
 DATA_FILES = {
@@ -45,7 +45,7 @@ def get_utils():
         "Location": "📍",
         "Landscape": "⛰️",
         "Pricing": "💰",
-        "Stay Type": "✈️",
+        "Fundamentals": "✈️",
         "Accessibility": "♿",
         "Wellness": "💆🏻‍♀️",
         "Family": "♿",
@@ -116,7 +116,7 @@ def load_data():
         "Location": sales_features_df[['sale_uid']+sales_features_cols_json['location']],
         "Landscape": sales_features_df[['sale_uid']+sales_features_cols_json['landscape']],
         "Pricing": sales_features_df[['sale_uid']+sales_features_cols_json['pricing']],
-        "Stay Type": sales_features_df[['sale_uid']+sales_features_cols_json['stay_type']],
+        "Fundamentals": sales_features_df[['sale_uid']+sales_features_cols_json['fundamentals']],
         "Accessibility": sales_features_df[['sale_uid']+sales_features_cols_json['accessibility']],
         "Wellness": sales_features_df[['sale_uid']+sales_features_cols_json['wellness']],
         "Family": sales_features_df[['sale_uid']+sales_features_cols_json['family']],

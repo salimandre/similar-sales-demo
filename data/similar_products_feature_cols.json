@@ -16,7 +16,7 @@
     "stay_type__destination_wide_open_space",
     "stay_type__destination_lake"
   ],
-  "stay_type": [
+  "fundamentals": [
     "location__zone_mh",
     "location__zone_lh",
     "location__zone_eur",
