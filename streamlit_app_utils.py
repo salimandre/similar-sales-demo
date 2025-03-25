@@ -29,7 +29,7 @@ def get_utils():
             "Location": "location",
             "Landscape": "landscape",
             "Pricing": "pricing", 
-            "Stay Type": "stay_type",
+            "Fundamentals": "fundamentals",
             "Accessibility": "accessibility",
             "Wellness": "wellness",
             "Family": "family",
