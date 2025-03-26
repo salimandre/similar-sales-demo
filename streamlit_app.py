@@ -135,6 +135,49 @@ def main():
 
                     chart
 
+                    #st.write("HHEHEFHEFHEF")
+
+                    ######
+                    ######
+                    #st.write(available_sale_dimensions)
+                    #sale_uid_1 = all_top_sales_dict[dim]['sale_uid_a'].iloc[0]
+                    #sale_uid_2 = all_top_sales_dict[dim]['sale_uid_b'].iloc[i]
+                    for dim in available_sale_dimensions:
+                        dict1 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_1])
+                        dict2 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_2])
+                        # START START START START
+                        # TEST TEST TEST TEST TEST
+                        # Creating DataFrame
+                        st.markdown(f"###### Comparison of Features: {dim}")
+                        sale_name_1 = sale_uid_to_name_dict.get(sale_uid_1)
+                        sale_name_2 = sale_uid_to_name_dict.get(sale_uid_2)
+                        features_1 = {k: v for k, v in dict1.items() if k not in ('sale_uid')}
+                        features_2 = {k: v for k, v in dict2.items() if k not in ('sale_uid')}
+                        df1 = pd.DataFrame(list(features_1.items()), columns=['Feature', sale_name_1]).astype(str)
+                        df2 = pd.DataFrame(list(features_2.items()), columns=['Feature', sale_name_2]).astype(str)
+                        df = pd.merge(df1, df2, on='Feature')
+
+                        def style_specific_cell(row):
+                            # Initialize an empty list to store styles
+                            styles = ['']
+
+                            # Apply color based on the value of each column
+                            if row[sale_name_1] != '0':
+                                styles.append('background-color: #ffcccc')  # Red color for Hotel 1 if value is not '0'
+                            else:
+                                styles.append('')  # No styling if the value is '0'
+                            
+                            if row[sale_name_2] != '0':
+                                styles.append('background-color: #ccccff')  # Blue color for Hotel 2 if value is not '0'
+                            else:
+                                styles.append('')  # No styling if the value is '0'
+
+                            return styles
+
+                        styled_df = df.style.apply(style_specific_cell, axis=1)
+                        st.dataframe(styled_df)
+
+
         # display chart rank v similarity
         st.markdown("<br><br>", unsafe_allow_html=True)
         global_top_sales_df['dimension'] = 'global'
