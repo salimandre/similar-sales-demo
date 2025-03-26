@@ -189,48 +189,82 @@ def main():
                             dict1 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_1])
                             dict2 = get_dict_from_df(thematic_features[dim][thematic_features[dim]['sale_uid'] == sale_uid_2])
                             common_features, different_features = compare_features(dict1, dict2)
-                            st.write(dict2)
-                            
+                            #st.write(dict2) TO REMOVE
+                            # START START START START
+                            # TEST TEST TEST TEST TEST
+                            # Creating DataFrame
+                            st.markdown("###### Comparison of Features")
+                            sale_name_1 = sale_uid_to_name_dict.get(sale_uid_1)
+                            sale_name_2 = sale_uid_to_name_dict.get(sale_uid_2)
+                            features_1 = {k: v for k, v in dict1.items() if k not in ('sale_uid')}
+                            features_2 = {k: v for k, v in dict2.items() if k not in ('sale_uid')}
+                            df1 = pd.DataFrame(list(features_1.items()), columns=['Feature', sale_name_1]).astype(str)
+                            df2 = pd.DataFrame(list(features_2.items()), columns=['Feature', sale_name_2]).astype(str)
+                            df = pd.merge(df1, df2, on='Feature')
+
+                            def style_specific_cell(row):
+                                # Initialize an empty list to store styles
+                                styles = ['']
+
+                                # Apply color based on the value of each column
+                                if row[sale_name_1] != '0':
+                                    styles.append('background-color: #ffcccc')  # Red color for Hotel 1 if value is not '0'
+                                else:
+                                    styles.append('')  # No styling if the value is '0'
+                                
+                                if row[sale_name_2] != '0':
+                                    styles.append('background-color: #ccccff')  # Blue color for Hotel 2 if value is not '0'
+                                else:
+                                    styles.append('')  # No styling if the value is '0'
+
+                                return styles
+
+                            styled_df = df.style.apply(style_specific_cell, axis=1)
+                            st.dataframe(styled_df)
+                            #st.dataframe(df.style.apply(style_specific_cell, axis=1, subset=['Hotel 1', 'Hotel 2']))
+                            # END END END END
+                            # TEST TEST TEST TEST TEST
+
                             # Format feature names
-                            relevant_keys = set(common_features+different_features)
-                            feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
-                            feats_2 = {k.split('__')[1]: dict2[k] for k in relevant_keys}
+                            #relevant_keys = set(common_features+different_features)
+                            #feats_1 = {k.split('__')[1]: dict1[k] for k in relevant_keys}
+                            #feats_2 = {k.split('__')[1]: dict2[k] for k in relevant_keys}
 
                             # Remove prefix for the DataFrame display
-                            filtered_dict1 = {k: v for k, v in feats_1.items()}
-                            filtered_dict2 = {k: v for k, v in feats_2.items()}
+                            #filtered_dict1 = {k: v for k, v in feats_1.items()}
+                            #filtered_dict2 = {k: v for k, v in feats_2.items()}
 
                             #df = pd.DataFrame([filtered_dict1, filtered_dict2], index=['Dict1', 'Dict2']).T
                             
                             # Prepare DataFrame for Altair
-                            sale_name_1 = sale_uid_to_name_dict.get(sale_uid_1)
-                            sale_name_2 = sale_uid_to_name_dict.get(sale_uid_2)
-                            df = pd.DataFrame({
-                                'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
-                                'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
-                                'Sales': [sale_name_1] * len(filtered_dict1) + [sale_name_2] * len(filtered_dict2)
-                            })
+                            #sale_name_1 = sale_uid_to_name_dict.get(sale_uid_1)
+                            #sale_name_2 = sale_uid_to_name_dict.get(sale_uid_2)
+                            #df = pd.DataFrame({
+                            #    'Feature': list(filtered_dict1.keys()) + list(filtered_dict2.keys()),
+                            #    'Value': list(filtered_dict1.values()) + list(filtered_dict2.values()),
+                            #    'Sales': [sale_name_1] * len(filtered_dict1) + [sale_name_2] * len(filtered_dict2)
+                            #})
 
                             # Create horizontal bar chart with Altair
-                            chart = alt.Chart(df).mark_bar().encode(
-                                column=alt.Column('Sales:N', title='Sales'),  # Separate bars by Sales
-                                x=alt.X(
-                                    'Value:Q', 
-                                    axis=alt.Axis(title='Value', values=[0, 1], format='.0f'),
-                                    scale=alt.Scale(domain=[0, 1])
-                                ),
-                                y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
-                                color=alt.Color('Sales:N', scale=alt.Scale(range=['#e74c3c', '#2874a6']),legend=None),
-                                tooltip=['Feature:N', 'Value:Q', 'Sales:N']
-                            ).properties(
-                                title="Comparison of Features",
-                                width=300,
-                                height=150
-                            )
-                            
-                            st.markdown("_Disclaimer: some informations we use such as latitude, longitude, price are not yet displayed here. Stay tuned._")
+                            #chart = alt.Chart(df).mark_bar().encode(
+                            #    column=alt.Column('Sales:N', title='Sales'),  # Separate bars by Sales
+                            #    x=alt.X(
+                            #        'Value:Q', 
+                            #        axis=alt.Axis(title='Value', values=[0, 1], format='.0f'),
+                            #        scale=alt.Scale(domain=[0, 1])
+                            #    ),
+                            #    y=alt.Y('Feature:N', axis=alt.Axis(title='Feature'), sort='-x'),
+                            #    color=alt.Color('Sales:N', scale=alt.Scale(range=['#e74c3c', '#2874a6']),legend=None),
+                            #    tooltip=['Feature:N', 'Value:Q', 'Sales:N']
+                            #).properties(
+                            #    title="Comparison of Features",
+                            ##    width=300,
+                            #    height=150
+                            #)
+                            #
+                            #st.markdown("_Disclaimer: some informations we use such as latitude, longitude, price are not yet displayed here. Stay tuned._")
 
-                            st.altair_chart(chart)
+                            #st.altair_chart(chart)
 
         st.markdown("<br><br>", unsafe_allow_html=True)
 
