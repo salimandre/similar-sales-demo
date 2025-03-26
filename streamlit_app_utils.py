@@ -9,7 +9,7 @@ import os
 PAGE_CONFIG = {"page_title": "Similar Products", "page_icon": "🏝️"}
 DEFAULT_SELECTIONS = {"Dimensions": ["Location", "Landscape", "Pricing", "Fundamentals", "Accessibility", "Wellness", "Family", "Activity"], 
                       "Top": (1, 3),
-                      "Weights": {"Location": 0.05, "Landscape": 0.15, "Pricing": 0.15, "Fundamentals": 0.35, "Accessibility": 0.05, "Wellness": 0.1, "Family": 0.1, "Activity": 0.05}}
+                      "Weights": {"Location": 0.10, "Landscape": 0.15, "Pricing": 0.15, "Fundamentals": 0.30, "Accessibility": 0.05, "Wellness": 0.1, "Family": 0.1, "Activity": 0.05}}
 DATA_FILES = {
     "rankings": "data/similar_products_rankings_part.csv",
     "display_names": "data/similar_products_display_names.csv",
