@@ -221,7 +221,6 @@ def main():
 
                             styled_df = df.style.apply(style_specific_cell, axis=1)
                             st.dataframe(styled_df)
-                            #st.dataframe(df.style.apply(style_specific_cell, axis=1, subset=['Hotel 1', 'Hotel 2']))
                             # END END END END
                             # TEST TEST TEST TEST TEST
 
