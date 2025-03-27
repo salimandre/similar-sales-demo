@@ -24,23 +24,18 @@
     "location__zone_lh",
     "location__zone_eur",
     "location__zone_national",
-    "stay_type__travel_single_hotel",
-    "stay_type__travel_multi_infra",
+    "stay_type__travel_hotel",
     "stay_type__travel_private_tour",
     "stay_type__travel_group_tour",
     "stay_type__travel_autotour",
-    "stay_type__travel_cruise",
+    "stay_type__travel_cruise"
+  ],
+  "pricing": [
     "stay_type__board_breakfast",
     "stay_type__board_half_board",
     "stay_type__board_according_to_program",
     "stay_type__board_no_meal",
-    "stay_type__board_full_board",
-    "stay_type__board_all_inclusive"
-  ],
-  "pricing": [
-    "pricing__display_type_price",
-    "pricing__display_type_pct",
-    "pricing__display_type_exclusive",
+    "stay_type__board_all_inclusive",
     "pricing__number_of_stars_3",
     "pricing__number_of_stars_4",
     "pricing__number_of_stars_5"
