@@ -10,14 +10,18 @@
     "location__spoken_dutch",
     "location__spoken_arabic",
     "stay_type__destination_city_break",
-    "stay_type__destination_paradise_on_earth",
-    "stay_type__destination_european_island",
+    "stay_type__destination_wide_open_space",
+    "stay_type__destination_countryside",
     "stay_type__destination_unusual_destination",
+    "stay_type__destination_paradise_on_earth",
+    "stay_type__destination_sun_and_beach",
+    "stay_type__destination_european_island",
     "stay_type__destination_mountain",
     "stay_type__destination_mountains_and_ski",
-    "stay_type__destination_countryside",
-    "stay_type__destination_wide_open_space",
-    "stay_type__destination_lake"
+    "stay_type__destination_nature",
+    "stay_type__destination_luxury_and_iconic",
+    "stay_type__destination_lake",
+    "stay_type__destination_safari"
   ],
   "fundamentals": [
     "location__zone_mh",
@@ -25,10 +29,14 @@
     "location__zone_eur",
     "location__zone_national",
     "stay_type__travel_hotel",
+    "stay_type__destination_tours_and_cruises",
     "stay_type__travel_private_tour",
     "stay_type__travel_group_tour",
     "stay_type__travel_autotour",
-    "stay_type__travel_cruise"
+    "stay_type__travel_cruise",
+    "stay_type__destination_gourmet",
+    "stay_type__destination_villa",
+    "stay_type__destination_without_transport"
   ],
   "pricing": [
     "stay_type__board_breakfast",
@@ -38,7 +46,9 @@
     "stay_type__board_all_inclusive",
     "pricing__number_of_stars_3",
     "pricing__number_of_stars_4",
-    "pricing__number_of_stars_5"
+    "pricing__number_of_stars_5",
+    "best_sale_price_without_transport_per_pax_night",
+    "best_sale_price_with_transport_per_pax_night"
   ],
   "accessibility": [
     "accessibility__no_airport_shuttle_included",
@@ -48,6 +58,8 @@
     "equipment_service__elevator"
   ],
   "wellness": [
+    "stay_type__destination_well_being",
+    "stay_type__destination_spa",
     "equipment_service__indoor_pool",
     "equipment_service__outdoor_pool",
     "equipment_service__hot_tub",
@@ -60,12 +72,12 @@
     "equipment_service__steam_bath"
   ],
   "family": [
+    "stay_type__destination_family",
     "equipment_service__kids_club",
     "equipment_service__baby_cot",
-    "equipment_service__microwave",
-    "equipment_service__kitchen",
     "equipment_service__kids_playground",
     "equipment_service__babysitting",
+    "stay_type__destination_adult_only",
     "accessibility__adult_only",
     "stay_type__profile_single",
     "stay_type__profile_family",
