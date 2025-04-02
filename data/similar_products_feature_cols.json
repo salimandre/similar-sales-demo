@@ -9,6 +9,8 @@
     "location__spoken_portuguese",
     "location__spoken_dutch",
     "location__spoken_arabic",
+    "stay_type__branding_waterpark",
+    "stay_type__branding_theme_park",
     "stay_type__destination_city_break",
     "stay_type__destination_wide_open_space",
     "stay_type__destination_countryside",
@@ -51,13 +53,14 @@
     "best_sale_price_with_transport_per_pax_night"
   ],
   "accessibility": [
-    "accessibility__no_airport_shuttle_included",
-    "accessibility__not_reduced_mobility_friendly",
-    "accessibility__pets_not_allowed",
+    "accessibility__airport_shuttle_included",
+    "accessibility__reduced_mobility_friendly",
+    "accessibility__pets_allowed",
     "equipment_service__parking",
     "equipment_service__elevator"
   ],
   "wellness": [
+    "stay_type__branding_wellness",
     "stay_type__destination_well_being",
     "stay_type__destination_spa",
     "equipment_service__indoor_pool",
@@ -72,6 +75,7 @@
     "equipment_service__steam_bath"
   ],
   "family": [
+    "stay_type__branding_adult_only",
     "stay_type__destination_family",
     "equipment_service__kids_club",
     "equipment_service__baby_cot",
