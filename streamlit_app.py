@@ -31,7 +31,7 @@ def main():
 
     # Adding selection box for culture choice
     selected_culture = st.selectbox(
-        "culture",
+        "Culture",
         ("fr_FR", "it_IT", "es_ES", "en_GB", "nl_NL", "de_AT", "de_DE", "fr_BE", "nl_BE", "fr_CH", "de_CH"),
     )
 
