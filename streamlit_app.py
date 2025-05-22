@@ -29,6 +29,12 @@ def main():
     # Load Data
     rankings_df, sales_display_names_df, sales_features_df, sales_features_cols_json, thematic_features = load_data()
 
+    # Adding selection box for culture choice
+    selected_culture = st.selectbox(
+        "culture",
+        ("fr_FR", "it_IT", "es_ES", "en_GB", "nl_NL", "de_AT", "de_DE", "fr_BE", "nl_BE", "fr_CH", "de_CH"),
+    )
+
     # Adding selection box by sale display name 
     selected_sale = st.selectbox(
         "Select a sale:",
