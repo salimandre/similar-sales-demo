@@ -38,7 +38,7 @@ def main():
     # Adding selection box by sale display name 
     selected_sale = st.selectbox(
         "Select a sale:",
-        sales_display_names_df['sale_display_name'],
+        sales_display_names_df.query(f"culture == '{selected_culture}'")['sale_display_name'],
         index=3
     )
 
